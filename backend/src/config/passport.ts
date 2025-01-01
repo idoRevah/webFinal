@@ -11,19 +11,24 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
+        const email = profile.emails?.[0]?.value || 'no-email@example.com';
+        const avatar = profile.photos?.[0]?.value || '';
+
         let user = await User.findOne({ googleId: profile.id });
         if (!user) {
           user = await User.create({
             googleId: profile.id,
-            email: profile.emails[0].value,
+            email,
             username: profile.displayName,
-            avatar: profile.photos[0]?.value,
+            avatar,
           });
         }
         done(null, user);
       } catch (err) {
-        done(err, null);
+        done(err, undefined);
       }
     }
   )
 );
+
+export default passport;

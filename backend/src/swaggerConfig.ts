@@ -2,13 +2,27 @@ import swaggerJsDoc from 'swagger-jsdoc';
 
 const options = {
   definition: {
-    openapi: '3.0.0', // Swagger version
+    openapi: '3.0.0',
     info: {
-      title: 'News Website API', // API title
-      version: '1.0.0', // API version
+      title: 'News Website API',
+      version: '1.0.0',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
-  apis: ['./src/routes/*.ts'], // Path to the route files
+  apis: ['./src/routes/*.ts'],
 };
 
 export const swaggerSpec = swaggerJsDoc(options);

@@ -9,6 +9,8 @@ const router = express.Router();
  * /users/{id}:
  *   get:
  *     summary: Fetch a user's profile by ID
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -27,6 +29,8 @@ router.get('/:id', getUserProfile);
  * /users/{id}:
  *   put:
  *     summary: Update a user's profile by ID
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
