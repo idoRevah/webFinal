@@ -60,4 +60,20 @@ router.get(
  */
 router.post('/refresh', refreshToken);
 
+/**
+ * @swagger
+ * /auth/test-token:
+ *   get:
+ *     summary: Generate a test JWT
+ *     responses:
+ *       200:
+ *         description: Returns a test JWT
+ */
+router.get('/test-token', (req, res) => {
+  const testUser = { _id: 'test-user-id' }; // Replace with actual test user details
+  const token = generateToken(testUser);
+  res.json({ token });
+});
+
+
 export default router;
