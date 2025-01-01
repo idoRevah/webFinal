@@ -5,9 +5,8 @@ import authRoutes from './routes/authRoutes';
 import postRoutes from './routes/postRoutes';
 import userRoutes from './routes/userRoutes';
 import commentRoutes from './routes/commentRoutes';
-// TODO: add swagger
-// import swaggerUi from 'swagger-ui-express';
-// import { swaggerSpec } from './swaggerConfig';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './swaggerConfig';
 
 // Load environment variables
 dotenv.config();
@@ -31,6 +30,6 @@ app.use('/users', userRoutes);
 app.use('/comments', commentRoutes);
 
 // Swagger API Docs
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 export default app;
