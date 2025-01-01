@@ -33,4 +33,31 @@ router.get(
   }
 );
 
+/**
+ * @swagger
+ * /auth/refresh:
+ *   post:
+ *     summary: Refresh the JWT using a refresh token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refreshToken
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 description: The refresh token
+ *     responses:
+ *       200:
+ *         description: Returns a new JWT
+ *       401:
+ *         description: No token provided
+ *       403:
+ *         description: Invalid token
+ */
+router.post('/refresh', refreshToken);
+
 export default router;

@@ -10,6 +10,7 @@ export const generateToken = (user: any) => {
 export const refreshToken = (req: any, res: any) => {
   const token = req.body.refreshToken;
   if (!token) return res.status(401).json({ message: 'No token provided' });
+  
   jwt.verify(token, process.env.JWT_REFRESH_SECRET || '', (err: any, user: any) => {
     if (err) return res.status(403).json({ message: 'Invalid token' });
     const newToken = generateToken(user);
