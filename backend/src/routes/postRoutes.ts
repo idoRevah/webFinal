@@ -10,6 +10,22 @@ const router = express.Router();
  * /posts:
  *   post:
  *     summary: Create a new post
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - content
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Title of the post
+ *               content:
+ *                 type: string
+ *                 description: Content of the post
  *     responses:
  *       201:
  *         description: Post created successfully
@@ -32,6 +48,26 @@ router.get('/', getPosts);
  * /posts/{id}:
  *   put:
  *     summary: Update a post by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the post to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Updated title of the post
+ *               content:
+ *                 type: string
+ *                 description: Updated content of the post
  *     responses:
  *       200:
  *         description: Post updated successfully
@@ -43,6 +79,13 @@ router.put('/:id', authenticate, upload.single('image'), updatePost);
  * /posts/{id}:
  *   delete:
  *     summary: Delete a post by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the post to delete
  *     responses:
  *       200:
  *         description: Post deleted successfully
@@ -54,6 +97,13 @@ router.delete('/:id', authenticate, deletePost);
  * /posts/{id}/like:
  *   post:
  *     summary: Like a post by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the post to like
  *     responses:
  *       200:
  *         description: Post liked successfully
