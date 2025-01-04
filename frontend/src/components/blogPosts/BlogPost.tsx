@@ -1,6 +1,6 @@
-import PostFooter from "@/components/blogPost/PostFooter";
-import PostDesc from "@/components/blogPost/PostDesc";
-import PostTitle from "@/components/blogPost/PostTitle";
+import PostFooter from "@/components/blogPosts/PostFooter";
+import PostDesc from "@/components/blogPosts/PostDesc";
+import PostTitle from "@/components/blogPosts/PostTitle";
 import { Box } from "@mui/material";
 
 export default function blog(): JSX.Element {
