@@ -1,9 +1,11 @@
 import { Button } from "@mui/material";
+import ResponsiveAppBar from "./components/navbar/navbar.tsx";
 import "./App.css";
 
 function App() {
   return (
     <>
+      <ResponsiveAppBar></ResponsiveAppBar>
       <div className="flex items-center p-3">
         <div>
           <h1 className="text-3xl font-bold underline">Hello worlde!</h1>
