@@ -1,5 +1,5 @@
 import PostAuthor from "./PostAuthor";
 import PostImage from "./PostImage";
 import PostTitle from "./PostTitle";
-
-export { PostAuthor, PostImage, PostTitle };
+import PostBody from "./PostBody";
+export { PostAuthor, PostImage, PostTitle, PostBody };
