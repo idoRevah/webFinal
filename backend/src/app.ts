@@ -6,7 +6,7 @@ import postRoutes from './routes/postRoutes';
 import userRoutes from './routes/userRoutes';
 import commentRoutes from './routes/commentRoutes';
 import swaggerUi from 'swagger-ui-express';
-import { swaggerSpec } from './swaggerConfig';
+import { swaggerSpec } from './config/swaggerConfig';
 
 // Load environment variables
 dotenv.config();
