@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import { generateToken } from '../controllers/authController';
+import { generateToken, refreshToken } from '../controllers/authController';
 
 const router = express.Router();
 
@@ -32,5 +32,48 @@ router.get(
     res.json({ token });
   }
 );
+
+/**
+ * @swagger
+ * /auth/refresh:
+ *   post:
+ *     summary: Refresh the JWT using a refresh token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refreshToken
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 description: The refresh token
+ *     responses:
+ *       200:
+ *         description: Returns a new JWT
+ *       401:
+ *         description: No token provided
+ *       403:
+ *         description: Invalid token
+ */
+router.post('/refresh', refreshToken);
+
+/**
+ * @swagger
+ * /auth/test-token:
+ *   get:
+ *     summary: Generate a test JWT
+ *     responses:
+ *       200:
+ *         description: Returns a test JWT
+ */
+router.get('/test-token', (req, res) => {
+  const testUser = { _id: 'test-user-id' }; // Replace with actual test user details
+  const token = generateToken(testUser);
+  res.json({ token });
+});
+
 
 export default router;

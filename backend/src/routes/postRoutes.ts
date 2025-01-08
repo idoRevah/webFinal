@@ -10,6 +10,8 @@ const router = express.Router();
  * /posts:
  *   post:
  *     summary: Create a new post
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -48,6 +50,8 @@ router.get('/', getPosts);
  * /posts/{id}:
  *   put:
  *     summary: Update a post by ID
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -79,6 +83,8 @@ router.put('/:id', authenticate, upload.single('image'), updatePost);
  * /posts/{id}:
  *   delete:
  *     summary: Delete a post by ID
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -97,6 +103,8 @@ router.delete('/:id', authenticate, deletePost);
  * /posts/{id}/like:
  *   post:
  *     summary: Like a post by ID
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

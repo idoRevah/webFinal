@@ -9,6 +9,8 @@ const router = express.Router();
  * /comments/{postId}:
  *   post:
  *     summary: Create a comment for a post
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: postId
