@@ -4,6 +4,16 @@ import path from "path";
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    hmr: {
+      overlay: true, // Show errors in the browser
+    },
+    watch: {
+      ignored: ["**/node_modules/**", "**/dist/**"], // Ignore heavy folders
+      usePolling: true,
+    },
+  },
+
   plugins: [react()],
   css: {
     postcss: "./postcss.config.ts",

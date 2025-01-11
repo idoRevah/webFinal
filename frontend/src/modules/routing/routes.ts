@@ -1,27 +1,31 @@
 import Blog from "../../pages/blog";
 import signIn from "../../pages/signIn";
 import Route from "./route.type";
-
+import Post from "@/pages/post";
 const routes: Array<Route> = [
   {
     text: "Blog",
     path: "/",
-    element: Blog(),
+    element: Blog,
+    isVisible: true,
   },
   {
     text: "SignIn",
     path: "/SignIn",
-    element: signIn(),
+    element: signIn,
+    isVisible: true,
   },
   {
     text: "SignUp",
     path: "/SignIn",
-    element: signIn(),
+    element: signIn,
+    isVisible: false,
   },
   {
-    text: "blogger",
-    path: "/Blog",
-    element: Blog(),
+    text: "Post",
+    path: "/Post/:id",
+    element: Post,
+    isVisible: false,
   },
 ];
 

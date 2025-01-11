@@ -7,6 +7,10 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { NavLink } from "react-router-dom";
 import { routes } from "@/modules/routing";
 
+const filteredRoutes = () => {
+  return routes.filter((r) => r.isVisible == true);
+};
+
 function ResponsiveAppBar() {
   return (
     <AppBar position="static">
@@ -31,7 +35,7 @@ function ResponsiveAppBar() {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {routes.map((route) => (
+            {filteredRoutes().map((route) => (
               <NavLink to={route.path} key={route.text}>
                 <Typography sx={{ mr: 2, color: "white", display: "block" }}>
                   {route.text}
