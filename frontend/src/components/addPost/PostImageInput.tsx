@@ -2,18 +2,18 @@ import React from "react";
 import { TextField } from "@mui/material";
 
 const PostSubtitleInput: React.FC<any> = ({
-  subtitle,
-  onChange: setSubtitle,
+  imageUrl,
+  onChange: setImageUrl,
 }) => {
   return (
     <TextField
-      label="Subtitle"
+      label="Image url"
       variant="outlined"
       fullWidth
       margin="normal"
-      value={subtitle}
-      onChange={(e) => setSubtitle(e.target.value)}
-      placeholder="Enter a subtitle (optional)..."
+      value={imageUrl}
+      onChange={(e) => setImageUrl(e.target.value)}
+      placeholder="Enter Image URL"
     />
   );
 };

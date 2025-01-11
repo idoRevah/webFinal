@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { TextField } from "@mui/material";
 
-const PostContentEditor: React.FC = () => {
-  const [content, setContent] = useState("");
-
+const PostContentEditor: React.FC<any> = ({
+  content,
+  onChange: setContent,
+}) => {
   return (
     <TextField
       label="Post Content"
