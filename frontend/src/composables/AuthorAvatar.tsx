@@ -2,6 +2,9 @@ import MuiAvatar from "@mui/material/Avatar";
 import { deepOrange } from "@mui/material/colors";
 
 const getInitials = (fullName: string): string => {
+  console.log(fullName);
+  if (!fullName) return "AA";
+
   const names = fullName.trim().split(" ");
   return names.length === 1
     ? names[0][0].toUpperCase()

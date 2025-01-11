@@ -5,6 +5,7 @@ import {
   updatePost,
   deletePost,
   likePost,
+  getPostById,
 } from "../controllers/postController";
 import { upload } from "../middlewares/fileUploadMiddleware";
 import { authenticate } from "../middlewares/authMiddleware";
@@ -51,6 +52,24 @@ router.post("/", upload.single("image"), createPost);
  *         description: Returns a list of posts
  */
 router.get("/", getPosts);
+
+/**
+ * @swagger
+ * /posts:
+ *   get:
+ *     summary: Fetch post by Id
+ *   parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the post to get
+ *     responses:
+ *       200:
+ *         description: Returns a list of posts
+ */
+router.get("/:id", getPostById);
 
 /**
  * @swagger

@@ -4,8 +4,6 @@ export const createPost = async (req: any, res: any) => {
   console.log("post");
   const { title, content, subtitle, imageSrc, category } = req.body;
   // const image = req.file ? req.file.filename : null;
-  console.log("new post being saved");
-  console.log(title, content);
   const post = new Post({
     title,
     subtitle,
@@ -26,8 +24,14 @@ export const getPosts = async (req: any, res: any) => {
     ...p.toObject(),
     author: "Ido Revah",
   }));
-  console.log(postsWithAuthor);
   res.json(postsWithAuthor);
+};
+
+export const getPostById = async (req: any, res: any) => {
+  const post = await Post.findById(req.params.id);
+  if (!post) return res.status(404).json({ message: "Post not found" });
+
+  res.json({ ...post.toObject(), author: "Ido Revah" });
 };
 
 export const updatePost = async (req: any, res: any) => {
