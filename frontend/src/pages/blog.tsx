@@ -1,6 +1,7 @@
 import BlogPost from "@/components/blogPosts/BlogPost";
 import { BlogPostDataType } from "@/components/blogPosts/PostTypes";
-const posts: Array<BlogPostDataType> = [
+import { useEffect, useState } from "react";
+const postsss: Array<BlogPostDataType> = [
   {
     author: "Eden Gev Fadalon",
     date: new Date(),
@@ -32,6 +33,18 @@ const posts: Array<BlogPostDataType> = [
   },
 ];
 export default function blog(): JSX.Element {
+  const [posts, setPosts] = useState<Array<BlogPostDataType>>([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const postsDataResponse = await fetch("http://localhost:3000/posts");
+      const r = await postsDataResponse.json();
+      setPosts(r);
+    };
+    fetchPosts();
+  }, []);
+  useEffect(() => console.log("posts", posts), [posts]);
+
   return (
     <>
       <div className="container mx-auto mt-8 w-[80vw]">
@@ -39,13 +52,13 @@ export default function blog(): JSX.Element {
           {posts.map((post) => (
             <BlogPost
               key={post.id}
-              date={post.date}
+              createdAt={post.createdAt}
               id={post.id}
-              subject={post.subject}
-              desc={post.desc}
+              category={post.category}
+              subtitle={post.subtitle}
               title={post.title}
               author={post.author}
-              imgSrc={post.imgSrc}
+              imageSrc={post.imageSrc}
             />
           ))}
         </div>

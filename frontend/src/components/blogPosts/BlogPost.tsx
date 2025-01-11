@@ -28,7 +28,7 @@ export default function BlogPost(BlogPostData: BlogPostDataType): JSX.Element {
           <Box
             component="img"
             className="w-90% h-52 object-cover transition-transform duration-300 ease-in-out hover:scale-105"
-            src={BlogPostData.imgSrc}
+            src={BlogPostData.imageSrc}
             alt="Blog Cover"
             onClick={openFullPost}
             sx={{
@@ -47,12 +47,12 @@ export default function BlogPost(BlogPostData: BlogPostDataType): JSX.Element {
             }}
           >
             {/* Title */}
-            <PostTitle title="How We Made A Blog"></PostTitle>
-            <PostDesc desc={BlogPostData.desc}></PostDesc>
+            <PostTitle title={BlogPostData.title}></PostTitle>
+            <PostDesc desc={BlogPostData.subtitle}></PostDesc>
             <PostFooter
               author={BlogPostData.author}
-              date={BlogPostData.date}
-              subject={BlogPostData.subject}
+              date={BlogPostData.createdAt}
+              subject={BlogPostData.category}
             ></PostFooter>
           </Box>
         </Box>

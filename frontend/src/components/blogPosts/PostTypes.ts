@@ -1,11 +1,10 @@
 interface BlogPostDataType {
-  imgSrc: string;
+  imageSrc: string;
   title: string;
-  desc: string;
   id: string;
-  date: Date;
+  createdAt: Date;
   author: string;
-  subject: string;
+  category: string;
   content?: string;
   subtitle: string;
 }

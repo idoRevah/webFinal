@@ -1,7 +1,7 @@
 import Post from "../models/postModel";
 
 export const createPost = async (req: any, res: any) => {
-  console.log(req.body);
+  console.log("post");
   const { title, content, subtitle, imageSrc, category } = req.body;
   // const image = req.file ? req.file.filename : null;
   console.log("new post being saved");
@@ -19,8 +19,15 @@ export const createPost = async (req: any, res: any) => {
 };
 
 export const getPosts = async (req: any, res: any) => {
-  const posts = await Post.find().populate("user", "username");
-  res.json(posts);
+  // TODO: after implementing users logic
+  // const posts = await Post.find().populate("user", "username");
+  const posts = await Post.find();
+  const postsWithAuthor = posts.map((p) => ({
+    ...p.toObject(),
+    author: "Ido Revah",
+  }));
+  console.log(postsWithAuthor);
+  res.json(postsWithAuthor);
 };
 
 export const updatePost = async (req: any, res: any) => {

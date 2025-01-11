@@ -12,7 +12,7 @@ export default function PostFooter(footerData: PostFooterData) {
         <Divider orientation="vertical" variant="middle" flexItem />
         {footerData.author}
         <Divider orientation="vertical" variant="middle" flexItem />
-        {dateToPostString(footerData.date)}
+        {dateToPostString(new Date(footerData.date))}
         <Divider orientation="vertical" variant="middle" flexItem />
         <Chip
           label={footerData.subject}
