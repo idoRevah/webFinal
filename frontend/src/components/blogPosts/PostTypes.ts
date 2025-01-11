@@ -6,6 +6,8 @@ interface BlogPostDataType {
   date: Date;
   author: string;
   subject: string;
+  content?: string;
+  subtitle: string;
 }
 
 interface PostFooterData {
