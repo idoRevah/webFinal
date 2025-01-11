@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { TextField } from "@mui/material";
 
-const PostTitleInput: React.FC = () => {
-  const [title, setTitle] = useState("");
-
+const PostTitleInput: React.FC<any> = ({ title, onChange: setTitle }: any) => {
   return (
     <TextField
       label="Post Title"

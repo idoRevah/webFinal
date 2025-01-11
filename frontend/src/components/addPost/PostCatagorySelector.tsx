@@ -4,9 +4,10 @@ import { getCategories } from "@/composables/categories";
 
 const categories = getCategories();
 
-const PostCategorySelector: React.FC = () => {
-  const [category, setCategory] = useState("");
-
+const PostCategorySelector: React.FC<any> = ({
+  category,
+  onChange: setCategory,
+}) => {
   return (
     <TextField
       select

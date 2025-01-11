@@ -1,7 +1,13 @@
-import express from 'express';
-import { createPost, getPosts, updatePost, deletePost, likePost } from '../controllers/postController';
-import { upload } from '../middlewares/fileUploadMiddleware';
-import { authenticate } from '../middlewares/authMiddleware';
+import express from "express";
+import {
+  createPost,
+  getPosts,
+  updatePost,
+  deletePost,
+  likePost,
+} from "../controllers/postController";
+import { upload } from "../middlewares/fileUploadMiddleware";
+import { authenticate } from "../middlewares/authMiddleware";
 
 const router = express.Router();
 
@@ -32,7 +38,8 @@ const router = express.Router();
  *       201:
  *         description: Post created successfully
  */
-router.post('/', authenticate, upload.single('image'), createPost);
+router.post("/", upload.single("image"), createPost);
+// router.post("/", authenticate, upload.single("image"), createPost);
 
 /**
  * @swagger
@@ -43,7 +50,7 @@ router.post('/', authenticate, upload.single('image'), createPost);
  *       200:
  *         description: Returns a list of posts
  */
-router.get('/', getPosts);
+router.get("/", getPosts);
 
 /**
  * @swagger
@@ -76,7 +83,7 @@ router.get('/', getPosts);
  *       200:
  *         description: Post updated successfully
  */
-router.put('/:id', authenticate, upload.single('image'), updatePost);
+router.put("/:id", authenticate, upload.single("image"), updatePost);
 
 /**
  * @swagger
@@ -96,7 +103,7 @@ router.put('/:id', authenticate, upload.single('image'), updatePost);
  *       200:
  *         description: Post deleted successfully
  */
-router.delete('/:id', authenticate, deletePost);
+router.delete("/:id", authenticate, deletePost);
 
 /**
  * @swagger
@@ -116,6 +123,6 @@ router.delete('/:id', authenticate, deletePost);
  *       200:
  *         description: Post liked successfully
  */
-router.post('/:id/like', authenticate, likePost);
+router.post("/:id/like", authenticate, likePost);
 
 export default router;
