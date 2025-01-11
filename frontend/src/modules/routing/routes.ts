@@ -2,7 +2,14 @@ import Blog from "../../pages/blog";
 import signIn from "../../pages/signIn";
 import Route from "./route.type";
 import Post from "@/pages/post";
+import AddPost from "@/pages/addPost";
 const routes: Array<Route> = [
+  {
+    text: "SignIn",
+    path: "/SignIn",
+    element: signIn,
+    isVisible: true,
+  },
   {
     text: "Blog",
     path: "/",
@@ -10,9 +17,9 @@ const routes: Array<Route> = [
     isVisible: true,
   },
   {
-    text: "SignIn",
-    path: "/SignIn",
-    element: signIn,
+    text: "Add Post",
+    path: "/AddPost",
+    element: AddPost,
     isVisible: true,
   },
   {
