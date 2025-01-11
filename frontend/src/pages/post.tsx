@@ -5,6 +5,7 @@ import {
   PostTitle,
   PostBody,
 } from "@/components/fullPost";
+import CommentsSection from "@/components/fullPost/comments/CommentsSection";
 
 const Post = () => {
   const { id } = useParams();
@@ -42,6 +43,7 @@ Declarative Syntax
 React’s declarative approach allows developers to describe what the UI should look like for a given state, and React ensures that the actual UI matches this description. For instance:
   "
       ></PostBody>
+      <CommentsSection></CommentsSection>
     </div>
   );
 };
