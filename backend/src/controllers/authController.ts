@@ -1,19 +1,39 @@
-
-// src/controllers/authController.ts
+import { OAuth2Client } from 'google-auth-library';
 import jwt from 'jsonwebtoken';
 import User from '../models/userModel';
 
-export const generateToken = (user: any) => {
-  return jwt.sign({ id: user._id }, process.env.JWT_SECRET || '', { expiresIn: '1d' });
-};
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-export const refreshToken = (req: any, res: any) => {
-  const token = req.body.refreshToken;
-  if (!token) return res.status(401).json({ message: 'No token provided' });
-  
-  jwt.verify(token, process.env.JWT_REFRESH_SECRET || '', (err: any, user: any) => {
-    if (err) return res.status(403).json({ message: 'Invalid token' });
-    const newToken = generateToken(user);
-    res.json({ token: newToken });
-  });
+export const googleLogin = async (req: any, res: any) => {
+  const { idToken } = req.body;
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload) {
+      return res.status(400).json({ message: 'Invalid ID token' });
+    }
+
+    const { sub: googleId, email, name: username, picture: avatar } = payload;
+
+    let user = await User.findOne({ googleId });
+    if (!user) {
+      user = await User.create({
+        googleId,
+        email,
+        username,
+        avatar,
+      });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || '', { expiresIn: '1d' });
+    res.json({ token });
+  } catch (error) {
+    console.error('Error verifying Google ID token:', error);
+    res.status(500).json({ message: 'Authentication failed' });
+  }
 };
