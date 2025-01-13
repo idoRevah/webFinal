@@ -5,6 +5,7 @@ import authRoutes from "./routes/authRoutes";
 import postRoutes from "./routes/postRoutes";
 import userRoutes from "./routes/userRoutes";
 import commentRoutes from "./routes/commentRoutes";
+import llmRoutes from './routes/llmRoutes';
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swaggerConfig";
 import cors from "cors";
@@ -28,6 +29,7 @@ app.use("/auth", authRoutes);
 app.use("/posts", postRoutes);
 app.use("/users", userRoutes);
 app.use("/comments", commentRoutes);
+app.use("/llm", llmRoutes);
 
 // Swagger API Docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
