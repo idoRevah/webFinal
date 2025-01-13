@@ -1,24 +1,30 @@
 import request from 'supertest';
 import app from '../app';
 
-describe('Auth Routes', () => {
-  it('should initiate Google OAuth login', async () => {
-    const response = await request(app).get('/auth/google');
-    expect(response.status).toBe(302); // Expect a redirect
-  });
-
-  it('should refresh JWT with a valid refresh token', async () => {
-    const refreshToken = 'valid-refresh-token'; // Replace with actual token during integration
-    const response = await request(app)
-      .post('/auth/refresh')
-      .send({ refreshToken });
-
+describe('Post Routes', () => {
+  it('should fetch all posts', async () => {
+    const response = await request(app).get('/posts');
     expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('token');
+    expect(Array.isArray(response.body)).toBe(true);
   });
 
-  it('should return 401 for missing refresh token', async () => {
-    const response = await request(app).post('/auth/refresh').send({});
+  it('should create a new post with valid data', async () => {
+    const token = 'valid-jwt-token'; // Replace with an actual token during integration
+    const postData = { title: 'Test Post', content: 'This is a test post.' };
+
+    const response = await request(app)
+      .post('/posts')
+      .set('Authorization', `Bearer ${token}`)
+      .send(postData);
+
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty('title', postData.title);
+  });
+
+  it('should return 401 when creating a post without a token', async () => {
+    const postData = { title: 'Unauthorized Post', content: 'No auth token.' };
+
+    const response = await request(app).post('/posts').send(postData);
     expect(response.status).toBe(401);
   });
 });

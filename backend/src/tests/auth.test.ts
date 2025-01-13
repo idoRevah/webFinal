@@ -2,9 +2,26 @@ import request from 'supertest';
 import app from '../app';
 
 describe('Auth Routes', () => {
-  it('should initiate Google OAuth login', async () => {
-    const response = await request(app).get('/auth/google');
-    expect(response.status).toBe(302); // Expect a redirect
+  it('should authenticate and return a JWT with a valid Google ID token', async () => {
+    const idToken = 'valid-google-id-token'; // Replace with an actual valid ID token during testing
+
+    const response = await request(app)
+      .post('/auth/google')
+      .send({ idToken });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('token');
+  });
+
+  it('should return 400 for an invalid Google ID token', async () => {
+    const idToken = 'invalid-google-id-token'; // Simulate an invalid token
+
+    const response = await request(app)
+      .post('/auth/google')
+      .send({ idToken });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message', 'Invalid ID token');
   });
 
   it('should refresh JWT with a valid refresh token', async () => {
