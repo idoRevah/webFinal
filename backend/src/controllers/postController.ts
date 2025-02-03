@@ -1,19 +1,23 @@
 import Post from "../models/postModel";
 
 export const createPost = async (req: any, res: any) => {
-  console.log("post");
-  const { title, content, subtitle, imageSrc, category } = req.body;
-  // const image = req.file ? req.file.filename : null;
-  const post = new Post({
-    title,
-    subtitle,
-    content,
-    imageSrc,
-    category,
-    user: 1,
-  });
-  await post.save();
-  res.status(201).json(post);
+  try {
+    const { title, content, subtitle, imageSrc, category } = req.body;
+    // const image = req.file ? req.file.filename : null;
+    const post = new Post({
+      title,
+      subtitle,
+      content,
+      imageSrc,
+      category,
+      user: 1,
+    });
+    await post.save();
+    res.status(201).json(post);
+  } catch (err) {
+    console.error("Can't add post with error:", err);
+    res.status(400);
+  }
 };
 
 export const getPosts = async (req: any, res: any) => {

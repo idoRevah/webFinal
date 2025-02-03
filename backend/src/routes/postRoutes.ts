@@ -58,7 +58,7 @@ router.get("/", getPosts);
  * /posts:
  *   get:
  *     summary: Fetch post by Id
- *   parameters:
+ *     parameters:
  *       - in: path
  *         name: id
  *         schema:
