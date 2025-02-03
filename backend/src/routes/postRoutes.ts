@@ -39,8 +39,7 @@ const router = express.Router();
  *       201:
  *         description: Post created successfully
  */
-router.post("/", upload.single("image"), createPost);
-// router.post("/", authenticate, upload.single("image"), createPost);
+router.post("/", authenticate, upload.single("image"), createPost);
 
 /**
  * @swagger
