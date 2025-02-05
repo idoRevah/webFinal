@@ -18,19 +18,18 @@ export const googleLogin = async (req: any, res: any) => {
       return res.status(400).json({ message: 'Invalid ID token' });
     }
 
-    const { sub: googleId, email, name: username, picture: avatar } = payload;
+    const { email, name: username, picture: imageUrl } = payload;
 
-    let user = await User.findOne({ googleId });
+    let user = await User.findOne({ email });
     if (!user) {
       user = await User.create({
-        googleId,
         email,
         username,
-        avatar,
+        imageUrl
       });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || '', { expiresIn: '1d' });
+    const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET || '', { expiresIn: '1d' });
     res.json({ token });
   } catch (error) {
     console.error('Error verifying Google ID token:', error);
