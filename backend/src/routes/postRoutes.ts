@@ -9,6 +9,7 @@ import {
 } from "../controllers/postController";
 import { upload } from "../middlewares/fileUploadMiddleware";
 import { authenticate } from "../middlewares/authMiddleware";
+import commentRoutes from "./commentRoutes"; // Import comment routes
 
 const router = express.Router();
 
@@ -54,9 +55,9 @@ router.get("/", getPosts);
 
 /**
  * @swagger
- * /posts:
+ * /posts/{id}:
  *   get:
- *     summary: Fetch post by Id
+ *     summary: Fetch post by ID
  *     parameters:
  *       - in: path
  *         name: id
@@ -66,7 +67,7 @@ router.get("/", getPosts);
  *         description: ID of the post to get
  *     responses:
  *       200:
- *         description: Returns a list of posts
+ *         description: Returns the post data
  */
 router.get("/:id", getPostById);
 
@@ -142,5 +143,8 @@ router.delete("/:id", authenticate, deletePost);
  *         description: Post liked successfully
  */
 router.post("/:id/like", authenticate, likePost);
+
+// Mount comment routes under `/posts/:postId/comments`
+router.use("/:postId/comments", commentRoutes);
 
 export default router;
