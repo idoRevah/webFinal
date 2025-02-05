@@ -4,7 +4,7 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'News Website API',
+      title: 'Final Project API',
       version: '1.0.0',
     },
     components: {
