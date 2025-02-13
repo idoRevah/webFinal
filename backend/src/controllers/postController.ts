@@ -10,7 +10,7 @@ export const createPost = async (req: any, res: any) => {
       content,
       imageSrc,
       category,
-      userId: 1, // TODO: add user
+      user: req.user
     });
     await post.save();
     res.status(201).json(post);
@@ -21,33 +21,26 @@ export const createPost = async (req: any, res: any) => {
 };
 
 export const getPosts = async (req: any, res: any) => {
-  // TODO: after implementing users logic
-  // const posts = await Post.find().populate("user", "username");
-  const posts = await Post.find();
+  const posts = await Post.find().populate("user");
 
-  // TODO: remove next line and return posts
-  const postsWithAuthor = posts.map((p) => ({
-    ...p.toObject(),
-    author: "Ido Revah",
-  }));
-  res.json(postsWithAuthor);
+  res.json(posts);
 };
 
 export const getPostById = async (req: any, res: any) => {
   const post = await Post.findById(req.params.id);
   if (!post) return res.status(404).json({ message: "Post not found" });
 
-  // Todo: populate user
-  res.json({ ...post.toObject(), author: "Ido Revah" });
+  res.json(post);
 };
 
 export const updatePost = async (req: any, res: any) => {
   const post = await Post.findById(req.params.id);
   if (!post) return res.status(404).json({ message: "Post not found" });
-  // if (!post.user || post.user.toString() !== req.user.id) {
-  //   res.status(403).json({ message: "Unauthorized" });
-  //   return;
-  // }
+
+  if (!post.user || post.user !== req.user) {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
   const { title, content, subtitile, imageSrc, category } = req.body;
   post.title = title || post.title;
   post.content = content || post.content;
@@ -62,8 +55,11 @@ export const updatePost = async (req: any, res: any) => {
 export const deletePost = async (req: any, res: any) => {
   const post = await Post.findById(req.params.id);
   if (!post) return res.status(404).json({ message: "Post not found" });
-  // if (!post.user || post.user.toString() !== req.user.id)
-  // return res.status(403).json({ message: "Unauthorized" });
+
+  if (!post.user || post.user !== req.user) {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
   await Post.deleteOne({ _id: req.params.id });
   res.json({ message: "Post deleted" });
 };
@@ -74,7 +70,7 @@ export const likePost = async (req: any, res: any) => {
     res.status(404).json({ message: "Post not found" });
     return;
   }
-  post.likes += 1;
+  post.likes.push(req.user);
   await post.save();
   res.json(post);
 };

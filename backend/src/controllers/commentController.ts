@@ -5,7 +5,7 @@ export const createComment = async (req: any, res: any) => {
     const { content } = req.body;
     const comment = new Comment({
       content,
-      userId: 1, // TODO: add user
+      user: req.user,
       post: req.params.postId,
     });
     await comment.save();
@@ -18,6 +18,6 @@ export const createComment = async (req: any, res: any) => {
 };
 
 export const getCommentsForPost = async (req: any, res: any) => {
-  const comments = await Comment.find({ post: req.params.postId }).populate('user', 'username');
+  const comments = await Comment.find({ post: req.params.postId }).populate('user');
   res.json(comments);
 };

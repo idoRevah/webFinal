@@ -13,7 +13,7 @@ interface NewPost {
   content: String;
   imageSrc: String;
   category: String;
-  userId: Number;
+  user: Number;
 }
 
 export default function blog(): JSX.Element {
@@ -25,7 +25,7 @@ export default function blog(): JSX.Element {
 
   const handlePublish = () => {
     const post: NewPost = {
-      userId: 1,
+      user: 1,
       title,
       subtitle,
       imageSrc: imageUrl,
