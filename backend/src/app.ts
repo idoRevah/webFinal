@@ -15,8 +15,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// TODO: Add uploads
-app.use("/uploads", express.static("src/uploads"));
+// Uploads
+app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.use("/auth", authRoutes);
