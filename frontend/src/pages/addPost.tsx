@@ -2,46 +2,57 @@ import PostTitleInput from "@/components/addPost/PostTitleInput";
 import PostSubtitleInput from "@/components/addPost/PostSubtitleInput";
 import PostCategorySelector from "@/components/addPost/PostCatagorySelector";
 import PostContentEditor from "@/components/addPost/PostContentEditor";
-import ImageUrlInput from "@/components/addPost/PostImageInput";
+import ImageInput from "@/components/addPost/PostImageInput";
 import { useState } from "react";
 import { Button, Stack } from "@mui/material";
-import { BlogPostDataType } from "@/components/blogPosts/PostTypes";
 
 interface NewPost {
   title: string;
   subtitle: string;
-  content: String;
-  imageSrc: String;
-  category: String;
-  userId: Number;
+  content: string;
+  category: string;
+  userId: number;
+  imageSrc: File | null; // Accepts a File instead of a string
 }
 
-export default function blog(): JSX.Element {
+export default function Blog(): JSX.Element {
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
   const [category, setCategory] = useState("");
   const [content, setContent] = useState("");
+  const [imageSrc, setImage] = useState<File | null>(null); // Change from string to File
 
-  const handlePublish = () => {
-    const post: NewPost = {
-      userId: 1,
-      title,
-      subtitle,
-      imageSrc: imageUrl,
-      category,
-      content,
-    };
+  const handlePublish = async () => {
+    if (!imageSrc) {
+      alert("Please select an image.");
+      return;
+    }
 
-    fetch("http://localhost:3000/posts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(post),
-    });
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("subtitle", subtitle);
+    formData.append("content", content);
+    formData.append("category", category);
+    formData.append("userId", "1"); // Convert number to string for FormData
+    formData.append("imageSrc", imageSrc); // Send the file properly
 
-    alert("Post Published!");
+    try {
+      const response = await fetch("http://localhost:3000/posts", {
+        method: "POST",
+        body: formData, // No need for Content-Type, FormData handles it automatically
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create post");
+      }
+
+      const data = await response.json();
+      console.log("Post created successfully:", data);
+      alert("Post Published!");
+    } catch (error) {
+      console.error("Error uploading post:", error);
+      alert("Failed to publish post.");
+    }
   };
 
   const handleCancel = () => {
@@ -52,10 +63,10 @@ export default function blog(): JSX.Element {
     <>
       <div style={{ maxWidth: "800px", margin: "auto", padding: "20px" }}>
         <h1>Create New Post</h1>
-
         <PostTitleInput title={title} onChange={setTitle} />
         <PostSubtitleInput subTitle={subtitle} onChange={setSubtitle} />
-        <ImageUrlInput imageUrl={imageUrl} onChange={setImageUrl} />
+        <ImageInput onFileSelect={setImage} />{" "}
+        {/* Accepts File instead of string */}
         <PostCategorySelector category={category} onChange={setCategory} />
         <PostContentEditor content={content} onChange={setContent} />
         <Stack direction="row" spacing={2} style={{ marginTop: "20px" }}>
