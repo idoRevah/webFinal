@@ -2,8 +2,8 @@ import Post from "../models/postModel";
 
 export const createPost = async (req: any, res: any) => {
   try {
-    const { title, content, subtitle, imageSrc, category } = req.body;
-    // const image = req.file ? req.file.filename : null;
+    const { title, content, subtitle, category } = req.body;
+    const imageSrc = req.file ? `${process.env.URL}:${process.env.PORT}/uploads/${req.file.filename}` : '';
     const post = new Post({
       title,
       subtitle,
@@ -40,14 +40,12 @@ export const updatePost = async (req: any, res: any) => {
   if (!post.user || post.user !== req.user) {
     return res.status(403).json({ message: "Unauthorized" });
   }
-
   const { title, content, subtitile, imageSrc, category } = req.body;
   post.title = title || post.title;
   post.content = content || post.content;
   post.subtitle = subtitile || post.subtitle;
-  post.imageSrc = imageSrc || post.imageSrc;
+  post.imageSrc = req.file ? `${process.env.URL}:${process.env.PORT}/uploads/${req.file.filename}` : post.imageSrc;
   post.category = category || post.category;
-  // post.image = req.file ? req.file.filename : post.image;
   await post.save();
   res.json(post);
 };
