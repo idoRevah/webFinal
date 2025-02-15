@@ -1,7 +1,6 @@
 import express from "express";
 import authRoutes from "./routes/authRoutes";
 import postRoutes from "./routes/postRoutes";
-import userRoutes from "./routes/userRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import llmRoutes from './routes/llmRoutes';
 import swaggerUi from "swagger-ui-express";
@@ -21,7 +20,6 @@ app.use("/uploads", express.static("uploads"));
 // Routes
 app.use("/auth", authRoutes);
 app.use("/posts", postRoutes);
-app.use("/users", userRoutes);
 app.use("/comments", commentRoutes);
 app.use("/llm", llmRoutes);
 
