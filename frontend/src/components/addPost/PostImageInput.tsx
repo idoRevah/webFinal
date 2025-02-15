@@ -25,7 +25,7 @@ const FileUploader: React.FC<{ onFileSelect: (file: File | null) => void }> = ({
 
   return (
     <div
-      className="relative flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-all duration-300"
+      className="relative flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 my-5 transition-all duration-300"
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >

@@ -5,6 +5,7 @@ import PostContentEditor from "@/components/addPost/PostContentEditor";
 import ImageInput from "@/components/addPost/PostImageInput";
 import { useState } from "react";
 import { Button, Stack } from "@mui/material";
+import { Snackbar, Alert } from "@mui/material";
 
 interface NewPost {
   title: string;
@@ -16,15 +17,25 @@ interface NewPost {
 }
 
 export default function Blog(): JSX.Element {
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [severity, setSeverity] = useState("");
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [category, setCategory] = useState("");
   const [content, setContent] = useState("");
   const [imageSrc, setImage] = useState<File | null>(null); // Change from string to File
 
+  const displayMessage = (message: string, isError: boolean) => {
+    setSeverity(isError ? "error" : "success");
+    setAlertMessage(message);
+    setOpenSnackbar(true);
+  };
+
   const handlePublish = async () => {
     if (!imageSrc) {
-      alert("Please select an image.");
+      displayMessage("Please Upload Image", true);
+
       return;
     }
 
@@ -47,36 +58,57 @@ export default function Blog(): JSX.Element {
       }
 
       const data = await response.json();
-      console.log("Post created successfully:", data);
-      alert("Post Published!");
+      displayMessage("Post Created successfully!", false);
     } catch (error) {
-      console.error("Error uploading post:", error);
-      alert("Failed to publish post.");
+      displayMessage("Failed to publish post.", true);
     }
   };
 
   const handleCancel = () => {
+    // TODO: Return to blog
     alert("Canceled.");
   };
 
   return (
     <>
       <div style={{ maxWidth: "800px", margin: "auto", padding: "20px" }}>
-        <h1>Create New Post</h1>
+        <h1 className="text-4xl font-extrabold text-gray-800 tracking-tight text-center">
+          ✍ Create Your Masterpiece
+        </h1>
+        <p className="text-lg text-gray-500 text-center mt-2">
+          Share your story, inspire others, and make an impact.
+        </p>
         <PostTitleInput title={title} onChange={setTitle} />
         <PostSubtitleInput subTitle={subtitle} onChange={setSubtitle} />
         <ImageInput onFileSelect={setImage} />{" "}
-        {/* Accepts File instead of string */}
         <PostCategorySelector category={category} onChange={setCategory} />
         <PostContentEditor content={content} onChange={setContent} />
-        <Stack direction="row" spacing={2} style={{ marginTop: "20px" }}>
-          <Button variant="contained" color="primary" onClick={handlePublish}>
-            Publish
+        <div className="flex justify-between mt-5">
+          <Button
+            variant="contained"
+            color="primary"
+            className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold px-6 py-2 rounded-lg shadow-lg transform hover:scale-105 transition duration-300"
+            onClick={handlePublish}
+          >
+            PUBLISH 🚀
           </Button>
-          <Button variant="text" color="error" onClick={handleCancel}>
-            Cancel
+          <Button variant="text" color="error">
+            CANCEL
           </Button>
-        </Stack>
+        </div>
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={3000}
+          onClose={() => setOpenSnackbar(false)}
+        >
+          <Alert
+            onClose={() => setOpenSnackbar(false)}
+            severity={severity}
+            sx={{ width: "100%" }}
+          >
+            {alertMessage}
+          </Alert>
+        </Snackbar>
       </div>
     </>
   );
