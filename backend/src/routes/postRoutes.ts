@@ -9,7 +9,7 @@ import {
 } from "../controllers/postController";
 import { upload } from "../middlewares/fileUploadMiddleware";
 import { authenticate } from "../middlewares/authMiddleware";
-import commentRoutes from "./commentRoutes"; // Import comment routes
+import commentRoutes from "./commentRoutes";
 
 const router = express.Router();
 
@@ -18,6 +18,8 @@ const router = express.Router();
  * /posts:
  *   post:
  *     summary: Create a new post
+ *     tags:
+ *       - Posts
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -28,17 +30,28 @@ const router = express.Router();
  *             type: object
  *             required:
  *               - title
+ *               - subtitle
  *               - content
+ *               - category
  *             properties:
  *               title:
  *                 type: string
- *                 description: Title of the post
+ *               subtitle:
+ *                 type: string
  *               content:
  *                 type: string
- *                 description: Content of the post
+ *               category:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: Post created successfully
+ *       400:
+ *         description: Missing required fields
+ *       500:
+ *         description: Internal server error
  */
 router.post("/", authenticate, upload.single("image"), createPost);
 
@@ -47,9 +60,13 @@ router.post("/", authenticate, upload.single("image"), createPost);
  * /posts:
  *   get:
  *     summary: Fetch all posts
+ *     tags:
+ *       - Posts
  *     responses:
  *       200:
  *         description: Returns a list of posts
+ *       500:
+ *         description: Internal server error
  */
 router.get("/", getPosts);
 
@@ -58,16 +75,22 @@ router.get("/", getPosts);
  * /posts/{id}:
  *   get:
  *     summary: Fetch post by ID
+ *     tags:
+ *       - Posts
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: ID of the post to get
+ *         description: ID of the post to retrieve
  *     responses:
  *       200:
  *         description: Returns the post data
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Internal server error
  */
 router.get("/:id", getPostById);
 
@@ -76,6 +99,8 @@ router.get("/:id", getPostById);
  * /posts/{id}:
  *   put:
  *     summary: Update a post by ID
+ *     tags:
+ *       - Posts
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -94,13 +119,26 @@ router.get("/:id", getPostById);
  *             properties:
  *               title:
  *                 type: string
- *                 description: Updated title of the post
+ *               subtitle:
+ *                 type: string
  *               content:
  *                 type: string
- *                 description: Updated content of the post
+ *               category:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       200:
  *         description: Post updated successfully
+ *       400:
+ *         description: Invalid request data
+ *       403:
+ *         description: Unauthorized access
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Internal server error
  */
 router.put("/:id", authenticate, upload.single("image"), updatePost);
 
@@ -109,6 +147,8 @@ router.put("/:id", authenticate, upload.single("image"), updatePost);
  * /posts/{id}:
  *   delete:
  *     summary: Delete a post by ID
+ *     tags:
+ *       - Posts
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -121,6 +161,12 @@ router.put("/:id", authenticate, upload.single("image"), updatePost);
  *     responses:
  *       200:
  *         description: Post deleted successfully
+ *       403:
+ *         description: Unauthorized access
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Internal server error
  */
 router.delete("/:id", authenticate, deletePost);
 
@@ -129,6 +175,8 @@ router.delete("/:id", authenticate, deletePost);
  * /posts/{id}/like:
  *   post:
  *     summary: Like a post by ID
+ *     tags:
+ *       - Posts
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -141,6 +189,12 @@ router.delete("/:id", authenticate, deletePost);
  *     responses:
  *       200:
  *         description: Post liked successfully
+ *       403:
+ *         description: Unauthorized access
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Internal server error
  */
 router.post("/:id/like", authenticate, likePost);
 

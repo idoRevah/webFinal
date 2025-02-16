@@ -8,6 +8,8 @@ const router = express.Router();
  * /llm/send:
  *   post:
  *     summary: Send text to LLM API
+ *     tags:
+ *       - LLM
  *     requestBody:
  *       required: true
  *       content:

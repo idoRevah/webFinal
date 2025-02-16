@@ -6,6 +6,15 @@ const options = {
     info: {
       title: 'Final Project API',
       version: '1.0.0',
+      description: 'API documentation for the Final Project, including user authentication, posts, comments, and LLM features.',
+      contact: {
+        name: 'Support Team',
+        email: 'support@example.com',
+      },
+      license: {
+        name: 'MIT',
+        url: 'https://opensource.org/licenses/MIT',
+      },
     },
     components: {
       securitySchemes: {
@@ -22,7 +31,7 @@ const options = {
       },
     ],
   },
-  apis: ['./src/routes/*.ts'],
+  apis: ['./src/routes/*.ts', './dist/routes/*.js'], // Ensure compatibility with compiled code
 };
 
 export const swaggerSpec = swaggerJsDoc(options);

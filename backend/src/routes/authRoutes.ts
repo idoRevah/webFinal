@@ -8,6 +8,8 @@ const router = express.Router();
  * /auth/google:
  *   post:
  *     summary: Log in with Google
+ *     tags:
+ *       - Authentication
  *     requestBody:
  *       required: true
  *       content:
@@ -21,11 +23,19 @@ const router = express.Router();
  *     responses:
  *       200:
  *         description: Returns a JWT after successful login
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: JWT token for authentication
  *       400:
  *         description: Invalid ID token
  *       500:
  *         description: Authentication failed
  */
-router.post('/auth/google', googleLogin);
+router.post('/google', googleLogin);
 
 export default router;
