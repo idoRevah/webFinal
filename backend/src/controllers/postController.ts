@@ -3,7 +3,7 @@ import Post from "../models/postModel";
 export const createPost = async (req: any, res: any) => {
   try {
     const { title, content, subtitle, category } = req.body;
-    const imageSrc = req.file ? `${process.env.URL}:${process.env.PORT}/uploads/${req.file.filename}` : '';
+    const imageSrc = req.file ? `${process.env.URL}:${process.env.PORT}/uploads/${req.file.filename}` : 'test';
 
     const post = new Post({
       title,

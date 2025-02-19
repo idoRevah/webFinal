@@ -1,10 +1,11 @@
 // src/middleware/authMiddleware.ts
 // import jwt from 'jsonwebtoken';
 // import User from '../models/userModel';
+import mongoose from "mongoose";
 
 // TODO: return after developing
 export const authenticate = async (req: any, res: any, next: any) => {
-  req.user = 1;
+  req.user = new mongoose.Types.ObjectId("56cb91bdc3464f14678934ca");
   next();
   // const token = req.header('Authorization')?.replace('Bearer ', '');
   // if (!token) return res.status(401).json({ message: 'No token provided' });
