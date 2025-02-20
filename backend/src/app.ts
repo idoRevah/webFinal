@@ -5,10 +5,13 @@ import commentRoutes from "./routes/commentRoutes";
 import llmRoutes from './routes/llmRoutes';
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swaggerConfig";
+import dotenv from "dotenv";
 import cors from "cors";
 
 // Initialize Express app
 const app = express();
+
+dotenv.config();
 
 // Middleware
 app.use(express.json());

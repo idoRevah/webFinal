@@ -48,8 +48,8 @@ export const updatePost = async (req: any, res: any) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: "Post not found" });
-
-    if (!post.user || post.user.toString() !== req.user) {
+    
+    if (!post.user || post.user.toString() !== req.user.toString()) {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
@@ -73,7 +73,7 @@ export const deletePost = async (req: any, res: any) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: "Post not found" });
 
-    if (!post.user || post.user.toString() !== req.user) {
+    if (!post.user || post.user.toString() !== req.user.toString()) {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
