@@ -3,10 +3,11 @@ import authRoutes from "./routes/authRoutes";
 import postRoutes from "./routes/postRoutes";
 import userRoutes from "./routes/userRoutes";
 import commentRoutes from "./routes/commentRoutes";
-import llmRoutes from './routes/llmRoutes';
+import llmRoutes from "./routes/llmRoutes";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swaggerConfig";
 import cors from "cors";
+import bodyParser from "body-parser";
 
 // Initialize Express app
 const app = express();
@@ -14,6 +15,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use(bodyParser({ limit: "1000mb" }));
 
 // Uploads
 app.use("/uploads", express.static("uploads"));

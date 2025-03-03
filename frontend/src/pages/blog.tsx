@@ -1,37 +1,7 @@
 import BlogPost from "@/components/blogPosts/BlogPost";
 import { BlogPostDataType } from "@/components/blogPosts/PostTypes";
 import { useEffect, useState } from "react";
-const postsss: Array<BlogPostDataType> = [
-  {
-    author: "Eden Gev Fadalon",
-    date: new Date(),
-    imgSrc:
-      "https://miro.medium.com/v2/resize:fit:1400/1*TK4Kdj-cc890gQkgUtKNyA.png",
-    id: "1",
-    subject: "Tech",
-    desc: "How We did some amazing tech with some computers and peoples wiwht some skills yes im typin oh yes shit bie",
-    title: "Making Blog Is easy",
-  },
-  {
-    author: "Eden Gev Fadalon",
-    date: new Date(),
-    imgSrc:
-      "https://miro.medium.com/v2/resize:fit:1400/1*TK4Kdj-cc890gQkgUtKNyA.png",
-    id: "1234",
-    subject: "Tech",
-    desc: "How We did some amazing tech with some computers and peoples wiwht some skills yes im typin oh yes shit bie",
-    title: "Making Blog Is easy",
-  },
-  {
-    author: "Eden Gev Fadalon",
-    date: new Date(),
-    imgSrc: "",
-    id: "1422",
-    subject: "Tech",
-    desc: "How We did some amazing tech with some computers and peoples wiwht some skills yes im typin oh yes shit bie",
-    title: "Making Blog Is easy",
-  },
-];
+
 export default function blog(): JSX.Element {
   const [posts, setPosts] = useState<Array<BlogPostDataType>>([]);
 
@@ -39,7 +9,10 @@ export default function blog(): JSX.Element {
     const fetchPosts = async () => {
       const postsDataResponse = await fetch("http://localhost:3000/posts");
       const r = await postsDataResponse.json();
-      setPosts(r);
+
+      setPosts(r.map((p) => ({ ...p, id: p._id })));
+
+      console.log(posts);
     };
     fetchPosts();
   }, []);
