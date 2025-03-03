@@ -6,7 +6,7 @@ import ImageInput from "@/components/addPost/PostImageInput";
 import { useState } from "react";
 import { Button, Stack } from "@mui/material";
 import { Snackbar, Alert } from "@mui/material";
-
+import PublishButton from "@/components/addPost/PublishButton";
 interface NewPost {
   title: string;
   subtitle: string;

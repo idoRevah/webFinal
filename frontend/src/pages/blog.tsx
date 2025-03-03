@@ -9,7 +9,10 @@ export default function blog(): JSX.Element {
     const fetchPosts = async () => {
       const postsDataResponse = await fetch("http://localhost:3000/posts");
       const r = await postsDataResponse.json();
-      setPosts(r);
+
+      setPosts(r.map((p) => ({ ...p, id: p._id })));
+
+      console.log(posts);
     };
     fetchPosts();
   }, []);
