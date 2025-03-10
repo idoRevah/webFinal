@@ -34,7 +34,11 @@ export function AuthProvider({ children }) {
         JSON.stringify({ username: data.username, imageUrl: data.imageUrl })
       );
       localStorage.setItem("token", data.token);
-      setUser({ username: data.username, imageUrl: data.imageUrl });
+      setUser({
+        username: data.username,
+        imageUrl: data.imageUrl,
+        id: data.id,
+      });
       setToken(data.token);
     } catch (error) {
       console.error("Login error:", error);

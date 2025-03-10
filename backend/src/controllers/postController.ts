@@ -1,16 +1,19 @@
+import { userInfo } from "os";
 import Post from "../models/postModel";
-
+import User from "../models/userModel";
 export const createPost = async (req: any, res: any) => {
   try {
     const { title, content, subtitle, category } = req.body;
-    const imageSrc = req.file ? `${process.env.URL}:${process.env.PORT}/uploads/${req.file.filename}` : '';
+    const imageSrc = req.file
+      ? `${process.env.URL}:${process.env.PORT}/uploads/${req.file.filename}`
+      : "";
     const post = new Post({
       title,
       subtitle,
       content,
       imageSrc,
       category,
-      userId: 1, // TODO: add user
+      user: req.user.id,
     });
     await post.save();
     res.status(201).json(post);
@@ -21,24 +24,20 @@ export const createPost = async (req: any, res: any) => {
 };
 
 export const getPosts = async (req: any, res: any) => {
-  // TODO: after implementing users logic
-  // const posts = await Post.find().populate("user", "username");
-  const posts = await Post.find();
-
-  // TODO: remove next line and return posts
+  const posts = await Post.find().populate("user", "username");
+  console.log(posts);
   const postsWithAuthor = posts.map((p) => ({
     ...p.toObject(),
-    author: "Ido Revah",
+    author: (p.user as any)?.username || "Unkown",
   }));
   res.json(postsWithAuthor);
 };
 
 export const getPostById = async (req: any, res: any) => {
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id).populate("user", "username");
   if (!post) return res.status(404).json({ message: "Post not found" });
 
-  // Todo: populate user
-  res.json({ ...post.toObject(), author: "Ido Revah" });
+  res.json({ ...post.toObject(), author: (post.user as any)?.username });
 };
 
 export const updatePost = async (req: any, res: any) => {
@@ -52,7 +51,9 @@ export const updatePost = async (req: any, res: any) => {
   post.title = title || post.title;
   post.content = content || post.content;
   post.subtitle = subtitile || post.subtitle;
-  post.imageSrc = req.file ? `${process.env.URL}:${process.env.PORT}/uploads/${req.file.filename}` : post.imageSrc;
+  post.imageSrc = req.file
+    ? `${process.env.URL}:${process.env.PORT}/uploads/${req.file.filename}`
+    : post.imageSrc;
   post.category = category || post.category;
   await post.save();
   res.json(post);
