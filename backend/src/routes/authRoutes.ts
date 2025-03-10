@@ -1,5 +1,5 @@
-import express from 'express';
-import { googleLogin } from '../controllers/authController';
+import express from "express";
+import { googleLogin } from "../controllers/authController";
 
 const router = express.Router();
 
@@ -26,6 +26,6 @@ const router = express.Router();
  *       500:
  *         description: Authentication failed
  */
-router.post('/auth/google', googleLogin);
+router.post("/google", googleLogin);
 
 export default router;

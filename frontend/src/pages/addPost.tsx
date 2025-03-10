@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Button, Stack } from "@mui/material";
 import { Snackbar, Alert } from "@mui/material";
 import PublishButton from "@/components/addPost/PublishButton";
+import { useAuth } from "@/context/AuthContext";
 interface NewPost {
   title: string;
   subtitle: string;
@@ -17,6 +18,7 @@ interface NewPost {
 }
 
 export default function Blog(): JSX.Element {
+  const { user, token } = useAuth();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [severity, setSeverity] = useState("");
@@ -44,12 +46,15 @@ export default function Blog(): JSX.Element {
     formData.append("subtitle", subtitle);
     formData.append("content", content);
     formData.append("category", category);
-    formData.append("userId", "1"); // Convert number to string for FormData
+    formData.append("userId", user.id); // Convert number to string for FormData
     formData.append("imageSrc", imageSrc); // Send the file properly
 
     try {
       const response = await fetch("http://localhost:3000/posts", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ Attach JWT for authentication
+        },
         body: formData, // No need for Content-Type, FormData handles it automatically
       });
 
