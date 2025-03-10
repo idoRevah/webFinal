@@ -2,7 +2,7 @@ import Blog from "../../pages/blog";
 import signIn from "../../pages/signIn";
 import Route from "./route.type";
 import Post from "@/pages/post";
-import AddPost from "@/pages/addPost";
+import AddPost from "@/pages/addPostModern";
 const routes: Array<Route> = [
   {
     text: "SignIn",
