@@ -59,13 +59,6 @@ export default function CommentsSection({
     }
   };
 
-  // const newEntry = {
-  //   author: "Guest User", // This should be replaced with authenticated user data
-  //   date: new Date().toISOString(),
-  //   content: newComment,
-  //   likes: 0,
-  // };
-
   return (
     <div className="mt-10">
       <h2 className="text-2xl font-semibold">Comments</h2>

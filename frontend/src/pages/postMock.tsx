@@ -53,8 +53,10 @@ export default function FullPost() {
             className="rounded-lg shadow-md w-full h-64 object-cover"
           />
         </div>
-        <p className="text-lg text-gray-300 leading-relaxed">{post.content}</p>
-
+        <div
+          className="text-lg text-gray-300 leading-relaxed"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
         {/* Comments Section */}
         {id && <CommentsSection comments={post.comments} postId={id} />}
       </div>

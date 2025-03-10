@@ -1,15 +1,14 @@
 import Blog from "../../pages/blog";
 import signIn from "../../pages/signIn";
 import Route from "./route.type";
-import Post from "@/pages/post";
 import AddPost from "@/pages/addPostModern";
-import postMock from "@/pages/postMock";
+import Post from "@/pages/postMock";
 const routes: Array<Route> = [
   {
-    text: "mock",
-    path: "mock/:id",
-    element: postMock,
-    isVisible: true,
+    text: "post",
+    path: "post/:id",
+    element: Post,
+    isVisible: false,
   },
   {
     text: "SignIn",
