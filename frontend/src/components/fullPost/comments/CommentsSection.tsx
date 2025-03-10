@@ -1,94 +1,118 @@
-import React, { useEffect, useState } from "react";
-import { Box, Typography, TextField, Button, Divider } from "@mui/material";
-import { AuthorAvatar } from "@/composables/AuthorAvatar";
-import { Comment } from "./CommentTypes";
-import { dateToPostString } from "@/composables/dateFormatters";
-import { getPostComments, saveNewComment } from "./comments";
-import { useParams } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
+import { useState } from "react";
+import { FaRegThumbsUp, FaThumbsUp } from "react-icons/fa"; // Like icons
 
-const CommentsSection: React.FC = () => {
-  const { id: postId } = useParams();
+interface Comment {
+  author: string;
+  createdAt: string;
+  content: string;
+  likes: number;
+}
 
-  const [comments, setComments] = useState<Array<Comment>>([]);
-  useEffect((): void => {
-    setComments(getPostComments(Number(postId)));
-  }, []);
+interface CommentsSectionProps {
+  comments: Comment[];
+  postId: String | undefined;
+}
 
-  const [newComment, setNewComment] = useState<string>("");
+export default function CommentsSection({
+  comments,
+  postId,
+}: CommentsSectionProps) {
+  const [commentList, setCommentList] = useState(comments);
+  const [newComment, setNewComment] = useState("");
+  const { user, token } = useAuth();
 
-  const handleAddComment = () => {
-    if (!newComment.trim()) return;
+  // Handle like action
+  // TODO: backend
+  const handleLike = (index: number) => {
+    const updatedComments = [...commentList];
+    updatedComments[index].likes += 1;
+    setCommentList(updatedComments);
+  };
 
-    const comment: Comment = {
-      id: comments.length + 1,
-      username: "GuestUser", // Replace with actual user if available
-      text: newComment,
-      date: dateToPostString(new Date()),
-    };
+  // Handle adding a new comment
+  const handleAddComment = async () => {
+    try {
+      console.log(postId);
+      const response = await fetch(
+        `http://localhost:3000/posts/${postId}/comments`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ content: newComment }),
+        }
+      );
 
-    setComments([comment, ...comments]);
-    saveNewComment(Number(postId), comment);
-    setNewComment("");
+      if (!response.ok) {
+        throw new Error("Failed to create comment");
+      }
+
+      setNewComment(""); // Clear input field
+
+      const newCommentObject = await response.json();
+      setCommentList([newCommentObject, ...commentList]);
+    } catch (error) {
+      console.log("error");
+    }
   };
 
   return (
-    <Box sx={{ maxWidth: "800px", margin: "auto" }}>
-      {/* Comments Title */}
-      <Typography variant="h5" sx={{ marginBottom: 2, fontWeight: "bold" }}>
-        Comments
-      </Typography>
+    <div className="mt-10">
+      <h2 className="text-2xl font-semibold">Comments</h2>
 
-      {/* Comment Input */}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <TextField
-          label="Add a comment..."
-          multiline
+      {/* Add New Comment Box */}
+      <div className="mt-4 bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
+        <textarea
+          className="w-full p-2 text-gray-300 bg-gray-900 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           rows={3}
-          variant="outlined"
+          placeholder="Write a comment..."
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
-          fullWidth
         />
-        <Button
-          variant="contained"
+        <button
           onClick={handleAddComment}
-          sx={{ alignSelf: "flex-end" }}
+          className="mt-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg transition-all duration-300 shadow-md"
         >
-          Post Comment
-        </Button>
-      </Box>
-
-      <Divider sx={{ marginY: 3 }} />
+          Add Comment
+        </button>
+      </div>
 
       {/* Comments List */}
-      {comments.length === 0 ? (
-        <Typography variant="body2" color="text.secondary">
-          No comments yet. Be the first to comment!
-        </Typography>
-      ) : (
-        comments.map((comment) => (
-          <Box
-            key={comment.id}
-            sx={{ display: "flex", alignItems: "flex-start", marginBottom: 3 }}
-          >
-            <AuthorAvatar name={comment.username}></AuthorAvatar>
-            <Divider sx={{ marginX: 1 }}></Divider>
-            <Box>
-              <Typography variant="subtitle2" fontWeight="bold">
-                {comment.username}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {comment.date}
-              </Typography>
-              <Typography variant="body1" sx={{ marginTop: 1 }}>
-                {comment.text}
-              </Typography>
-            </Box>
-          </Box>
-        ))
-      )}
-    </Box>
+      <div className="mt-4 space-y-4">
+        {commentList.length > 0 ? (
+          commentList.map((comment, index) => (
+            <div
+              key={index}
+              className="bg-gray-800 p-4 rounded-lg shadow border border-gray-700 flex flex-col"
+            >
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="font-semibold text-white">{comment.author}</p>
+                  <p className="text-gray-400 text-sm">
+                    {new Date(comment.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+                {/* Like Button */}
+                <div
+                  className="flex items-center gap-2 cursor-pointer text-gray-400 hover:text-blue-400 transition-all"
+                  onClick={() => handleLike(index)}
+                >
+                  {comment.likes > 0 ? <FaThumbsUp /> : <FaRegThumbsUp />}
+                  <span>{comment.likes}</span>
+                </div>
+              </div>
+              <p className="text-gray-300 mt-2">{comment.content}</p>
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-500">
+            No comments yet. Be the first to comment!
+          </p>
+        )}
+      </div>
+    </div>
   );
-};
-
-export default CommentsSection;
+}

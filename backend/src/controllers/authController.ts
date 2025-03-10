@@ -33,7 +33,7 @@ export const googleLogin = async (req: any, res: any) => {
       process.env.JWT_SECRET || "",
       { expiresIn: "1d" }
     );
-    res.json({ token, username, imageUrl });
+    res.json({ token, username, imageUrl, id: user.id });
   } catch (error) {
     console.error("Error verifying Google ID token:", error);
     res.status(500).json({ message: "Authentication failed" });
