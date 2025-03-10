@@ -31,9 +31,14 @@ export function AuthProvider({ children }) {
       // Save user & token in localStorage
       localStorage.setItem(
         "user",
-        JSON.stringify({ username: data.username, imageUrl: data.imageUrl })
+        JSON.stringify({
+          username: data.username,
+          imageUrl: data.imageUrl,
+          id: data.id,
+        })
       );
       localStorage.setItem("token", data.token);
+      console.log(data);
       setUser({
         username: data.username,
         imageUrl: data.imageUrl,

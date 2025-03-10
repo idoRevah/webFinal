@@ -9,7 +9,7 @@ const PostContentEditor: React.FC<any> = ({
     <TextField
       label="Post Content"
       variant="outlined"
-      className="transition-all duration-300 rounded-xl bg-white/30 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 shadow-md backdrop-blur-md custom-scrollbar"
+      className="transition-all duration-300 rounded-xl bg-white/30 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 shadow-md backdrop-blur-md"
       InputProps={{
         sx: {
           borderRadius: "12px",

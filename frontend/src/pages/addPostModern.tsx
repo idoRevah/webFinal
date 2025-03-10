@@ -43,6 +43,7 @@ export default function Blog() {
   }, [content]);
 
   const handlePublish = async () => {
+    console.log(user);
     if (!imageSrc) return displayMessage("Please upload an image.", true);
 
     if (!user?.id) return displayMessage("Please sign in first.", true);
