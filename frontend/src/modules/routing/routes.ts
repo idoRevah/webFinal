@@ -3,6 +3,7 @@ import signIn from "../../pages/signIn";
 import Route from "./route.type";
 import AddPost from "@/pages/addPostModern";
 import Post from "@/pages/postMock";
+import blogModern from "@/pages/blogModern";
 const routes: Array<Route> = [
   {
     text: "post",
@@ -14,6 +15,12 @@ const routes: Array<Route> = [
     text: "SignIn",
     path: "/SignIn",
     element: signIn,
+    isVisible: true,
+  },
+  {
+    text: "BM",
+    path: "/BlogModern",
+    element: blogModern,
     isVisible: true,
   },
   {
