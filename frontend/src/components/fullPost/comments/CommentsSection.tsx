@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
 import { FaRegThumbsUp, FaThumbsUp } from "react-icons/fa"; // Like icons
+import { API_BASE_URL } from "@/config/config";
 
 interface Comment {
   author: string;
@@ -34,17 +35,14 @@ export default function CommentsSection({
   const handleAddComment = async () => {
     try {
       console.log(postId);
-      const response = await fetch(
-        `http://localhost:3000/posts/${postId}/comments`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ content: newComment }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/posts/${postId}/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ content: newComment }),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to create comment");
