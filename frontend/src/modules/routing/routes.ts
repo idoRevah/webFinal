@@ -1,8 +1,8 @@
-import Blog from "../../pages/blog";
 import signIn from "../../pages/signIn";
 import Route from "./route.type";
 import AddPost from "@/pages/addPostModern";
 import Post from "@/pages/postMock";
+import blogModern from "@/pages/blogModern";
 const routes: Array<Route> = [
   {
     text: "post",
@@ -18,8 +18,8 @@ const routes: Array<Route> = [
   },
   {
     text: "Blog",
-    path: "/",
-    element: Blog,
+    path: "/Blog",
+    element: blogModern,
     isVisible: true,
   },
   {

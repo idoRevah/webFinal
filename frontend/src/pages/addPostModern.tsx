@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import PostTitleInput from "@/components/addPost/PostTitleInput";
 import PostSubtitleInput from "@/components/addPost/PostSubtitleInput";
 import PostCategorySelector from "@/components/addPost/PostCatagorySelector";
 import PostContentEditor from "@/components/addPost/PostContentEditor";
 import ImageInput from "@/components/addPost/PostImageInput";
 import AIFeedbackPanel from "@/components/addPost/AiFeedbackPanel";
-import { Button } from "@mui/material";
 import { useAuth } from "@/context/AuthContext";
 import { Rocket, XCircle } from "lucide-react";
+import Lottie from "lottie-react";
+import loadingAnimation from "@/assets/loading.json";
+import successAnimation from "@/assets/success.json";
 
 export default function Blog() {
   const { user, token } = useAuth();
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [category, setCategory] = useState("");
@@ -21,13 +25,16 @@ export default function Blog() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [severity, setSeverity] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const displayMessage = (message: string, isError: boolean) => {
     setSeverity(isError ? "error" : "success");
     setAlertMessage(message);
     setOpenSnackbar(true);
   };
-  // AI Analysis Placeholder (Will connect to backend later)
+
+  // AI Analysis Placeholder
   useEffect(() => {
     const analyzeContent = () => {
       let feedbackMessages: string[] = [];
@@ -43,10 +50,11 @@ export default function Blog() {
   }, [content]);
 
   const handlePublish = async () => {
-    console.log(user);
     if (!imageSrc) return displayMessage("Please upload an image.", true);
-
     if (!user?.id) return displayMessage("Please sign in first.", true);
+
+    setIsLoading(true);
+    setIsSuccess(false); // Reset success animation
 
     const formData = new FormData();
     formData.append("title", title);
@@ -62,15 +70,41 @@ export default function Blog() {
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
+
       if (!response.ok) throw new Error("Failed to publish post");
+
+      const data = await response.json();
+
+      setIsLoading(false);
+      setIsSuccess(true); // ✅ Show success animation
       displayMessage("Post Created Successfully!", false);
+      console.log(data);
+      setTimeout(() => {
+        navigate(`/post/${data._id}`);
+      }, 2000);
     } catch (error) {
+      setIsLoading(false);
+      setIsSuccess(false);
       displayMessage("Failed to publish post.", true);
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white px-6">
+      {/* 🔄 Lottie Loading Animation */}
+      {isLoading && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black/60 z-50">
+          <Lottie animationData={loadingAnimation} className="w-32 h-32" />
+        </div>
+      )}
+
+      {/* ✅ Lottie Success Animation */}
+      {isSuccess && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black/60 z-50">
+          <Lottie animationData={successAnimation} className="w-48 h-48" />
+        </div>
+      )}
+
       <div className="bg-gray-800 p-10 rounded-xl w-full max-w-5xl shadow-lg border border-gray-700">
         <h1 className="text-4xl font-extrabold text-white text-center">
           ✍ Create Your Masterpiece
@@ -92,8 +126,9 @@ export default function Blog() {
                 className="bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
                 startIcon={<Rocket />}
                 onClick={handlePublish}
+                disabled={isLoading}
               >
-                Publish
+                {isLoading ? "Posting..." : "Publish"}
               </Button>
               <Button
                 variant="outlined"
@@ -107,6 +142,7 @@ export default function Blog() {
           <AIFeedbackPanel feedback={feedback} setFeedback={setFeedback} />
         </div>
       </div>
+
       <Snackbar
         open={openSnackbar}
         autoHideDuration={3000}
