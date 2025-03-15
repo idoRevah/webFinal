@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import ResponsiveAppBar from "./components/navbar/navbar.tsx";
 import "./App.css";
 

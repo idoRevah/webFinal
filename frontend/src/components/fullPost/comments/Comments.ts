@@ -1,6 +1,7 @@
 import { Comment } from "./CommentTypes";
 
 const getPostComments = (postId: Number): Array<Comment> => {
+  console.log(postId);
   const postComments: Array<Comment> = [
     { id: 1, username: "JaneDoe", text: "Great post!", date: "Sep 10, 2025" },
     {
@@ -15,7 +16,7 @@ const getPostComments = (postId: Number): Array<Comment> => {
 };
 
 const saveNewComment = (postId: Number, comment: Comment) => {
-  console.log(comment);
+  console.log(postId, comment);
 };
 
 export { getPostComments, saveNewComment };

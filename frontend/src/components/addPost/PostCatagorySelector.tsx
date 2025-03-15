@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { MenuItem, TextField } from "@mui/material";
+// @ts-ignore
 import { getCategories } from "@/composables/categories";
 
 const categories = getCategories();

@@ -196,6 +196,7 @@ export default function Blog() {
       >
         <Alert
           onClose={() => setOpenSnackbar(false)}
+          //@ts-ignore
           severity={severity}
           sx={{ width: "100%" }}
         >

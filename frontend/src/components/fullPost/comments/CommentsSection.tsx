@@ -20,7 +20,7 @@ export default function CommentsSection({
 }: CommentsSectionProps) {
   const [commentList, setCommentList] = useState(comments);
   const [newComment, setNewComment] = useState("");
-  const { user, token } = useAuth();
+  const { token } = useAuth();
 
   // Handle like action
   // TODO: backend

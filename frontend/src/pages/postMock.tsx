@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CommentsSection from "../components/fullPost/comments/CommentsSection";
-import { p } from "framer-motion/client";
 
 export default function FullPost() {
   const { id } = useParams();
