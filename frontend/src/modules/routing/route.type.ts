@@ -5,4 +5,6 @@ export default interface Route {
   text: string;
   element: any;
   isVisible: boolean;
+  isSignInDepand: boolean;
+  isDisplayWhenUserLogged?: boolean;
 }
