@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { BlogPostDataType } from "@/components/blogPosts/PostTypes";
-import { motion, AnimatePresence } from "framer-motion";
 import SearchBar from "../components/blogPosts/SerachBar";
 import BlogGrid from "../components/blogPosts/BlogGrid";
 import FeaturedPost from "../components/blogPosts/FeaturedPost";

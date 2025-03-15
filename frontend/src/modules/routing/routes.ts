@@ -1,4 +1,3 @@
-import Blog from "../../pages/blog";
 import signIn from "../../pages/signIn";
 import Route from "./route.type";
 import AddPost from "@/pages/addPostModern";
@@ -18,15 +17,9 @@ const routes: Array<Route> = [
     isVisible: true,
   },
   {
-    text: "BM",
-    path: "/BlogModern",
-    element: blogModern,
-    isVisible: true,
-  },
-  {
     text: "Blog",
-    path: "/",
-    element: Blog,
+    path: "/Blog",
+    element: blogModern,
     isVisible: true,
   },
   {
