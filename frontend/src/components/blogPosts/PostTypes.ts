@@ -7,6 +7,7 @@ interface BlogPostDataType {
   category: string;
   content?: string;
   subtitle: string;
+  _id?: string;
 }
 
 export type { BlogPostDataType };

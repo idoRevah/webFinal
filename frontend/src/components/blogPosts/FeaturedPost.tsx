@@ -1,16 +1,21 @@
 import { motion } from "framer-motion";
-
+import { useNavigate } from "react-router-dom";
 const FeaturedPost = ({ post }) => {
+  const navigate = useNavigate();
+
   if (!post) return null;
 
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1, ease: "easeInOut" }} // ⏳ Slower, smoother
+      transition={{ duration: 1, ease: "easeInOut" }}
       className="w-full max-w-5xl mx-auto mb-8 relative"
     >
-      <div className="relative rounded-lg overflow-hidden shadow-xl hover:scale-[1.03] transition transform duration-500">
+      <div
+        onClick={() => navigate(`/post/${post._id}`)}
+        className="relative rounded-lg overflow-hidden shadow-xl hover:scale-[1.03] transition transform duration-500"
+      >
         <img
           src={post.imageSrc}
           className="w-full h-[400px] object-cover opacity-90"

@@ -2,8 +2,10 @@ import { Button } from "@mui/material";
 import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile(): JSX.Element {
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [posts, setPosts] = useState([]);
 
@@ -14,6 +16,7 @@ export default function Profile(): JSX.Element {
         const response = await fetch(`http://localhost:3000/posts`);
         const data = await response.json();
         console.log(user);
+        console.log(data);
         const userPosts = data.filter((p) => p.author == user.username);
         setPosts(userPosts);
       } catch (error) {
@@ -72,8 +75,9 @@ export default function Profile(): JSX.Element {
           >
             {posts.map((post) => (
               <motion.div
-                key={post.id}
+                key={post._id}
                 className="bg-gray-800 p-4 rounded-lg shadow-md border border-gray-700 hover:scale-105 transition-transform duration-300"
+                onClick={() => navigate(`/post/${post._id}`)}
               >
                 <img
                   src={post.imageSrc}
