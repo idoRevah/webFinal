@@ -1,5 +1,8 @@
 import express from "express";
-import { createComment, getCommentsForPost } from "../controllers/commentController";
+import {
+  createComment,
+  getCommentsForPost,
+} from "../controllers/commentController";
 import { authenticate } from "../middlewares/authMiddleware";
 
 const router = express.Router({ mergeParams: true });
@@ -9,6 +12,8 @@ const router = express.Router({ mergeParams: true });
  * /posts/{postId}/comments:
  *   post:
  *     summary: Create a comment for a post
+ *     tags:
+ *       - Comments
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -24,6 +29,8 @@ const router = express.Router({ mergeParams: true });
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - content
  *             properties:
  *               content:
  *                 type: string
@@ -31,6 +38,10 @@ const router = express.Router({ mergeParams: true });
  *     responses:
  *       201:
  *         description: Comment created successfully
+ *       400:
+ *         description: Missing required fields
+ *       500:
+ *         description: Internal server error
  */
 router.post("/", authenticate, createComment);
 
@@ -39,6 +50,8 @@ router.post("/", authenticate, createComment);
  * /posts/{postId}/comments:
  *   get:
  *     summary: Fetch all comments for a post
+ *     tags:
+ *       - Comments
  *     parameters:
  *       - in: path
  *         name: postId
@@ -49,6 +62,10 @@ router.post("/", authenticate, createComment);
  *     responses:
  *       200:
  *         description: Returns a list of comments for the post
+ *       404:
+ *         description: No comments found for this post
+ *       500:
+ *         description: Internal server error
  */
 router.get("/", getCommentsForPost);
 
