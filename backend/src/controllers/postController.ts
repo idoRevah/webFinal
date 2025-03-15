@@ -43,10 +43,10 @@ export const getPostById = async (req: any, res: any) => {
 export const updatePost = async (req: any, res: any) => {
   const post = await Post.findById(req.params.id);
   if (!post) return res.status(404).json({ message: "Post not found" });
-  // if (!post.user || post.user.toString() !== req.user.id) {
-  //   res.status(403).json({ message: "Unauthorized" });
-  //   return;
-  // }
+  if (!post.user || post.user.toString() !== req.user.toString()) {
+    res.status(403).json({ message: "Unauthorized" });
+    return;
+  }
   const { title, content, subtitile, category } = req.body;
   post.title = title || post.title;
   post.content = content || post.content;
@@ -74,7 +74,7 @@ export const likePost = async (req: any, res: any) => {
     res.status(404).json({ message: "Post not found" });
     return;
   }
-  post.likes += 1;
+  post.likes.push(req.user);
   await post.save();
   res.json(post);
 };
