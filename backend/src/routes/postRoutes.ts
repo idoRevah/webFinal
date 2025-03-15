@@ -53,7 +53,7 @@ const router = express.Router();
  *       500:
  *         description: Internal server error
  */
-router.post("/", authenticate, upload.single("image"), createPost);
+router.post("/", authenticate, upload.single("imageSrc"), createPost);
 
 /**
  * @swagger
@@ -140,7 +140,7 @@ router.get("/:id", getPostById);
  *       500:
  *         description: Internal server error
  */
-router.put("/:id", authenticate, upload.single("image"), updatePost);
+router.put("/:id", authenticate, upload.single("imageSrc"), updatePost);
 
 /**
  * @swagger
