@@ -9,9 +9,9 @@ import { AuthProvider } from "./context/AuthContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <GoogleOAuthProvider clientId="798748039221-pbth8e08t87b04uupqpvbgb8rrt308le.apps.googleusercontent.com">
-      <AuthProvider>
-        <BrowserRouter>
+    <BrowserRouter>
+      <GoogleOAuthProvider clientId="798748039221-pbth8e08t87b04uupqpvbgb8rrt308le.apps.googleusercontent.com">
+        <AuthProvider>
           <App />
           <div className="relative min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
             {/* Floating Gradient Blob Effect */}
@@ -19,8 +19,8 @@ createRoot(document.getElementById("root")!).render(
             <div className="absolute bottom-10 right-20 w-80 h-80 bg-indigo-400 rounded-full blur-3xl opacity-25"></div>
             <AppRouter></AppRouter>
           </div>
-        </BrowserRouter>
-      </AuthProvider>
-    </GoogleOAuthProvider>
+        </AuthProvider>
+      </GoogleOAuthProvider>
+    </BrowserRouter>
   </StrictMode>
 );

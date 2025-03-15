@@ -6,12 +6,21 @@ import Container from "@mui/material/Container";
 import AdbIcon from "@mui/icons-material/Adb";
 import { NavLink } from "react-router-dom";
 import { routes } from "@/modules/routing";
-
-const filteredRoutes = () => {
-  return routes.filter((r) => r.isVisible == true);
-};
+import { useAuth } from "@/context/AuthContext";
 
 function ResponsiveAppBar() {
+  const { user } = useAuth();
+
+  const filteredRoutes = () => {
+    return routes.filter(
+      (r) =>
+        r.isVisible == true ||
+        (r.isSignInDepand &&
+          ((!user && !r.isDisplayWhenUserLogged) ||
+            (!!user && r.isDisplayWhenUserLogged)))
+    );
+  };
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">

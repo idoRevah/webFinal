@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const navigate = useNavigate(); // ✅ Initialize navigation hook
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -38,13 +40,15 @@ export function AuthProvider({ children }) {
         })
       );
       localStorage.setItem("token", data.token);
-      console.log(data);
+
       setUser({
         username: data.username,
         imageUrl: data.imageUrl,
         id: data.id,
       });
       setToken(data.token);
+
+      navigate("/blog");
     } catch (error) {
       console.error("Login error:", error);
     }
@@ -56,6 +60,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("token");
     setUser(null);
     setToken(null);
+    navigate("/SignIn");
   };
 
   return (
