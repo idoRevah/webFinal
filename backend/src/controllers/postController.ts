@@ -6,7 +6,7 @@ export const createPost = async (req: any, res: any) => {
     const { title, content, subtitle, category } = req.body;
     const imageSrc = req.file
       ? `${process.env.URL}:${process.env.PORT}/uploads/${req.file.filename}`
-      : "";
+      : "test";
     const post = new Post({
       title,
       subtitle,

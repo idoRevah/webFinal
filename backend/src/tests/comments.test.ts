@@ -1,5 +1,7 @@
 import request from "supertest";
 import app from "../app";
+import mongoose from "mongoose";
+import User from "../models/userModel";
 
 describe("Comment Routes", () => {
   let token: string;
@@ -7,16 +9,25 @@ describe("Comment Routes", () => {
   let commentId: string;
 
   beforeAll(async () => {
-    const authResponse = await request(app)
-      .post("/auth/google")
-      .send({ idToken: "valid-google-id-token" });
+    // const authResponse = await request(app)
+    //   .post('/auth/google')
+    //   .send({ idToken: 'valid-google-id-token' });
 
-    token = authResponse.body.token;
+    // token = authResponse.body.token;
+    const dbUrl = "mongodb://localhost:27017/comments-tests";
+    await mongoose.connect(dbUrl);
+    await User.deleteMany();
+    token = "fake token";
 
     const postResponse = await request(app)
       .post("/posts")
       .set("Authorization", `Bearer ${token}`)
-      .send({ title: "Test Post", content: "Test Content" });
+      .send({
+        title: "Test Post",
+        content: "Test Content",
+        subtitle: "Test Subtitle",
+        category: "Test category",
+      });
 
     postId = postResponse.body._id;
   });
