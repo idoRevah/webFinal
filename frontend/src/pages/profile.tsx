@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "@/config/config";
 
 export default function Profile(): JSX.Element {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function Profile(): JSX.Element {
     const fetchUserPosts = async () => {
       if (!user?.id) return;
       try {
-        const response = await fetch(`http://localhost:3000/posts`);
+        const response = await fetch(`${API_BASE_URL}/posts`);
         const data = await response.json();
         console.log(user);
         console.log(data);

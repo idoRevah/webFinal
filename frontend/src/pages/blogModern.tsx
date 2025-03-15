@@ -13,6 +13,8 @@ export default function BlogPage() {
 
   useEffect(() => {
     const fetchPosts = async () => {
+      console.log("fetching");
+      console.log(API_BASE_URL);
       const postsDataResponse = await fetch(`${API_BASE_URL}/posts`);
       const data = await postsDataResponse.json();
       const formattedPosts = data.map((p) => ({ ...p, id: p._id }));
