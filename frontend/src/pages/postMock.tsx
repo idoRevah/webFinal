@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CommentsSection from "../components/fullPost/comments/CommentsSection";
-import { p } from "framer-motion/client";
+import { API_BASE_URL } from "@/config/config";
 
 export default function FullPost() {
   const { id } = useParams();
@@ -10,7 +10,7 @@ export default function FullPost() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const postResponse = await fetch(`http://localhost:3000/posts/${id}`);
+        const postResponse = await fetch(`${API_BASE_URL}/posts/${id}`);
         const postData = await postResponse.json();
 
         postData.comments = await fetchComments();
@@ -22,7 +22,7 @@ export default function FullPost() {
 
     const fetchComments = async () => {
       const commentsResponse = await fetch(
-        `http://localhost:3000/posts/${id}/comments`
+        `${API_BASE_URL}/posts/${id}/comments`
       );
       return await commentsResponse.json();
     };

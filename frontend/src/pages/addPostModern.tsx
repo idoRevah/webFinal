@@ -12,6 +12,7 @@ import { Rocket, XCircle } from "lucide-react";
 import Lottie from "lottie-react";
 import loadingAnimation from "@/assets/loading.json";
 import successAnimation from "@/assets/success.json";
+import { API_BASE_URL } from "@/config/config";
 
 export default function Blog() {
   const { user, token } = useAuth();
@@ -59,7 +60,7 @@ export default function Blog() {
 
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/llm/send", {
+      const response = await fetch(`${API_BASE_URL}/llm/send`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: `${title}\n\n${content}` }),
@@ -102,7 +103,7 @@ export default function Blog() {
     formData.append("imageSrc", imageSrc);
 
     try {
-      const response = await fetch("http://localhost:3000/posts", {
+      const response = await fetch(`${API_BASE_URL}/posts`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -196,6 +197,7 @@ export default function Blog() {
       >
         <Alert
           onClose={() => setOpenSnackbar(false)}
+          //@ts-ignore
           severity={severity}
           sx={{ width: "100%" }}
         >

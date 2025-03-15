@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "@/config/config";
 
 export default function Profile(): JSX.Element {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function Profile(): JSX.Element {
     const fetchUserPosts = async () => {
       if (!user?.id) return;
       try {
-        const response = await fetch(`http://localhost:3000/posts`);
+        const response = await fetch(`${API_BASE_URL}/posts`);
         const data = await response.json();
         console.log(user);
         console.log(data);
@@ -29,9 +30,6 @@ export default function Profile(): JSX.Element {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#181A23] to-[#1F2230] overflow-hidden p-6">
       {/* Background Lighting Effect */}
-      <div className="absolute inset-0">
-        <div className="absolute w-[500px] h-[500px] bg-white opacity-5 blur-[160px] rounded-full top-[-200px] left-[-200px]"></div>
-      </div>
 
       {/* Floating Glassmorphism Profile Card */}
       <motion.div
@@ -74,24 +72,22 @@ export default function Profile(): JSX.Element {
             className="grid grid-cols-1 sm:grid-cols-2 gap-6"
           >
             {posts.map((post) => (
-              <motion.div
-                key={post._id}
-                className="bg-gray-800 p-4 rounded-lg shadow-md border border-gray-700 hover:scale-105 transition-transform duration-300"
-                onClick={() => navigate(`/post/${post._id}`)}
-              >
-                <img
-                  src={post.imageSrc}
-                  alt={post.title}
-                  className="w-full h-40 object-cover rounded-md mb-3"
-                />
-                <h4 className="text-lg font-semibold text-white">
-                  {post.title}
-                </h4>
-                <p className="text-gray-400 text-sm mt-1">{post.subtitle}</p>
-                <p className="text-xs text-gray-500 mt-1">
-                  {new Date(post.createdAt).toLocaleDateString()}
-                </p>
-              </motion.div>
+              <div key={post._id} onClick={() => navigate(`/post/${post._id}`)}>
+                <motion.div className="bg-gray-800 p-4 rounded-lg shadow-md border border-gray-700 hover:scale-105 transition-transform duration-300">
+                  <img
+                    src={post.imageSrc}
+                    alt={post.title}
+                    className="w-full h-40 object-cover rounded-md mb-3"
+                  />
+                  <h4 className="text-lg font-semibold text-white">
+                    {post.title}
+                  </h4>
+                  <p className="text-gray-400 text-sm mt-1">{post.subtitle}</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {new Date(post.createdAt).toLocaleDateString()}
+                  </p>
+                </motion.div>
+              </div>
             ))}
           </motion.div>
         )}

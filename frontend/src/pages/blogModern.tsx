@@ -3,6 +3,7 @@ import { BlogPostDataType } from "@/components/blogPosts/PostTypes";
 import SearchBar from "../components/blogPosts/SerachBar";
 import BlogGrid from "../components/blogPosts/BlogGrid";
 import FeaturedPost from "../components/blogPosts/FeaturedPost";
+import { API_BASE_URL } from "@/config/config";
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<Array<BlogPostDataType>>([]);
@@ -12,7 +13,9 @@ export default function BlogPage() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const postsDataResponse = await fetch("http://localhost:3000/posts");
+      console.log("fetching");
+      console.log(API_BASE_URL);
+      const postsDataResponse = await fetch(`${API_BASE_URL}/posts`);
       const data = await postsDataResponse.json();
       const formattedPosts = data.map((p) => ({ ...p, id: p._id }));
 

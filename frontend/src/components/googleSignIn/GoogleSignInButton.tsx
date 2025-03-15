@@ -7,6 +7,7 @@ export default function GoogleSignInButton({ onSuccess, onError }) {
     <GoogleLogin
       onSuccess={onSuccess}
       onError={onError}
+      // @ts-ignore
       render={(renderProps) => (
         <Button
           variant="outlined"

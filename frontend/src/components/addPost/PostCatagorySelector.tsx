@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { MenuItem, TextField } from "@mui/material";
-import { getCategories } from "@/composables/categories";
 
-const categories = getCategories();
+const categories = ["Sport", "Tech", "Lifestyle", "Eco"];
 
 const PostCategorySelector: React.FC<any> = ({
   category,
