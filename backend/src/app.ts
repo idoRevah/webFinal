@@ -8,6 +8,7 @@ import { swaggerSpec } from "./config/swaggerConfig";
 import dotenv from "dotenv";
 import cors from "cors";
 import bodyParser from "body-parser";
+import path from "path";
 
 // Initialize Express app
 const app = express();
@@ -33,5 +34,11 @@ app.use("/llm", llmRoutes);
 
 // Swagger API Docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// frontent
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+  });
 
 export default app;
