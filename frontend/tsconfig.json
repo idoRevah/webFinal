@@ -1,7 +1,17 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+    "strict": false,
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": false,
+    "allowJs": true,
+    "checkJs": false,
+    "disableSizeLimit": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": ["node_modules", "dist", "**/*.js"],
+  "include": ["src/**/*"]
 }

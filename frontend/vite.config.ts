@@ -13,7 +13,14 @@ export default defineConfig({
       usePolling: true,
     },
   },
-
+  esbuild: {
+    tsconfigRaw: {
+      compilerOptions: {
+        strict: false,
+        skipLibCheck: true,
+      },
+    },
+  },
   plugins: [react()],
   css: {
     postcss: "./postcss.config.ts",

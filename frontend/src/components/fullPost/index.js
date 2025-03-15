@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PostBody = exports.PostTitle = exports.PostImage = exports.PostAuthor = void 0;
+var PostAuthor_1 = require("./PostAuthor");
+exports.PostAuthor = PostAuthor_1.default;
+var PostImage_1 = require("./PostImage");
+exports.PostImage = PostImage_1.default;
+var PostTitle_1 = require("./PostTitle");
+exports.PostTitle = PostTitle_1.default;
+var PostBody_1 = require("./PostBody");
+exports.PostBody = PostBody_1.default;
