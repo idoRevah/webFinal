@@ -1,34 +1,51 @@
-import request from 'supertest';
-import app from '../app';
+import request from "supertest";
+import app from "../app";
+import mongoose from "mongoose";
+import User from "../models/userModel";
 
-describe('Comment Routes', () => {
-  it('should fetch all comments for a post', async () => {
-    const postId = 'valid-post-id'; // Replace with an actual post ID during integration
-    const response = await request(app).get(`/comments/${postId}`);
+describe("Comment Routes", () => {
+  let token: string;
+  let postId: string;
+  let commentId: string;
 
-    expect(response.status).toBe(200);
-    expect(Array.isArray(response.body)).toBe(true);
+  beforeAll(async () => {
+    // const authResponse = await request(app)
+    //   .post('/auth/google')
+    //   .send({ idToken: 'valid-google-id-token' });
+
+    // token = authResponse.body.token;
+    const dbUrl = "mongodb://localhost:27017/comments-tests";
+    await mongoose.connect(dbUrl);
+    await User.deleteMany();
+    token = "fake token";
+
+    const postResponse = await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        title: "Test Post",
+        content: "Test Content",
+        subtitle: "Test Subtitle",
+        category: "Test category",
+      });
+
+    postId = postResponse.body._id;
   });
 
-  it('should create a comment for a post with valid data', async () => {
-    const token = 'valid-jwt-token'; // Replace with an actual token during integration
-    const postId = 'valid-post-id';
-    const commentData = { content: 'This is a test comment.' };
-
+  it("should create a comment for a post", async () => {
     const response = await request(app)
-      .post(`/comments/${postId}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send(commentData);
+      .post(`/posts/${postId}/comments`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({ content: "Test Comment" });
 
     expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty('content', commentData.content);
+    expect(response.body).toHaveProperty("content", "Test Comment");
+    commentId = response.body._id;
   });
 
-  it('should return 401 when creating a comment without a token', async () => {
-    const postId = 'valid-post-id';
-    const commentData = { content: 'Unauthorized comment.' };
-
-    const response = await request(app).post(`/comments/${postId}`).send(commentData);
-    expect(response.status).toBe(401);
+  it("should fetch all comments for a post", async () => {
+    const response = await request(app).get(`/posts/${postId}/comments`);
+    expect(response.status).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
   });
 });

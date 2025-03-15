@@ -1,5 +1,5 @@
-import express from 'express';
-import { sendToLLM } from '../controllers/llmController';
+import express from "express";
+import { sendToLLM } from "../controllers/llmController";
 
 const router = express.Router();
 
@@ -8,6 +8,8 @@ const router = express.Router();
  * /llm/send:
  *   post:
  *     summary: Send text to LLM API
+ *     tags:
+ *       - LLM
  *     requestBody:
  *       required: true
  *       content:
@@ -28,6 +30,6 @@ const router = express.Router();
  *       500:
  *         description: Failed to communicate with LLM API
  */
-router.post('/send', sendToLLM);
+router.post("/send", sendToLLM);
 
 export default router;
