@@ -37,7 +37,7 @@ export const googleLogin = async (req: any, res: any) => {
 
     const token = jwt.sign(
       { email: user.email, username, imageUrl, id: user._id },
-      process.env.JWT_SECRET || "",
+      JWT_SECRET || "",
       { expiresIn: "1d" }
     );
     res.json({ token, username, imageUrl, id: user.id });
@@ -104,11 +104,11 @@ export const updateUser = async (req: any, res: any) => {
 };
 
 export const loginUser = async (req: any, res: any) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
-    // Find the user by email
-    const user = await User.findOne({ email });
+    // Find the user by username
+    const user = await User.findOne({ username });
     if (!user || !user.password) {
       res.status(401).json({ message: 'Invalid credentials.' });
       return;

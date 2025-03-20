@@ -48,7 +48,7 @@ export const sendToLLM = async (req: Request, res: Response): Promise<void> => {
     // const parsedSuggestions = aiResponse.suggestions || [
     //   "No improvements detected.",
     // ];
-    console.log(aiResponse);
+    // console.log(aiResponse);
     res.status(200).json({ suggestions: aiResponse });
   } catch (err) {
     const error = err as any;

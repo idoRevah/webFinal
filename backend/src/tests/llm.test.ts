@@ -8,7 +8,7 @@ describe("LLM Routes", () => {
       .send({ text: "Explain AI" });
 
     expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("candidates");
+    expect(response.body).toHaveProperty("suggestions");
   });
 
   it("should return 400 if text is missing", async () => {

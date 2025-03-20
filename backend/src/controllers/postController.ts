@@ -1,6 +1,7 @@
 import { userInfo } from "os";
 import Post from "../models/postModel";
 import User from "../models/userModel";
+
 export const createPost = async (req: any, res: any) => {
   console.log("im here 2");
   try {
@@ -14,7 +15,7 @@ export const createPost = async (req: any, res: any) => {
       content,
       imageSrc,
       category,
-      user: req.user.id,
+      user: req.user,
     });
     await post.save();
     res.status(201).json(post);
@@ -58,7 +59,7 @@ export const updatePost = async (req: any, res: any) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: "Post not found" });
-    if (!post.user || post.user.toString() !== req.user.toString()) {
+    if (!post.user || post.user.toString() !== req.user.id) {
       res.status(403).json({ message: "Unauthorized" });
       return;
     }
@@ -83,7 +84,7 @@ export const deletePost = async (req: any, res: any) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: "Post not found" });
 
-    if (!post.user || post.user.toString() !== req.user) {
+    if (!post.user || post.user.toString() !== req.user.id) {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
@@ -100,8 +101,8 @@ export const likePost = async (req: any, res: any) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: "Post not found" });
 
-    if (!post.likes.includes(req.user)) {
-      post.likes.push(req.user);
+    if (!post.likes.includes(req.user.id)) { // make sure the id's are the same obj
+      post.likes.push(req.user.id);
       await post.save();
     }
 

@@ -8,16 +8,21 @@ describe("Post Routes", () => {
   let postId: string;
 
   beforeAll(async () => {
-    // Authenticate to get a valid token
-    // const authResponse = await request(app)
-    //   .post('/auth/google')
-    //   .send({ idToken: 'valid-google-id-token' });
-
-    // token = authResponse.body.token;
     const dbUrl = "mongodb://localhost:27017/posts-tests";
     await mongoose.connect(dbUrl);
     await User.deleteMany();
-    token = "fake token";
+
+    await request(app).post('/auth/register').send({
+      email: 'try@example.com',
+      username: 'testuser',
+      password: 'password123',
+    });
+
+    const loginResponse = await request(app).post('/auth/login').send({
+      username: 'testuser',
+      password: 'password123',
+    });
+    token = loginResponse.body.accessToken;
   });
 
   afterAll(async () => {
@@ -34,6 +39,7 @@ describe("Post Routes", () => {
         content: "Test Content",
         subtitle: "Test Subtitle",
         category: "Test category",
+        imageSrc: "test"
       });
 
     expect(response.status).toBe(201);
@@ -61,7 +67,7 @@ describe("Post Routes", () => {
         title: "Updated Title",
         content: "Updated Content",
         subtitle: "Updated Subtitle",
-        category: "Updated Category",
+        category: "Updated Category"
       });
 
     expect(response.status).toBe(200);

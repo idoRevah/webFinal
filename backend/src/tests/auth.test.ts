@@ -3,7 +3,7 @@ import app from "../app";
 
 describe("Auth Routes", () => {
 
-  it("should return 400 for invalid Google ID token", async () => {
+  it("should return 500 for invalid Google ID token", async () => {
     const response = await request(app)
       .post("/auth/google")
       .send({ idToken: "invalid-google-id-token" });

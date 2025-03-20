@@ -9,15 +9,21 @@ describe("Comment Routes", () => {
   let commentId: string;
 
   beforeAll(async () => {
-    // const authResponse = await request(app)
-    //   .post('/auth/google')
-    //   .send({ idToken: 'valid-google-id-token' });
-
-    // token = authResponse.body.token;
     const dbUrl = "mongodb://localhost:27017/comments-tests";
     await mongoose.connect(dbUrl);
     await User.deleteMany();
-    token = "fake token";
+    
+    await request(app).post('/auth/register').send({
+      email: 'try@example.com',
+      username: 'testuser',
+      password: 'password123',
+    });
+
+    const loginResponse = await request(app).post('/auth/login').send({
+      username: 'testuser',
+      password: 'password123',
+    });
+    token = loginResponse.body.accessToken;
 
     const postResponse = await request(app)
       .post("/posts")
@@ -27,6 +33,7 @@ describe("Comment Routes", () => {
         content: "Test Content",
         subtitle: "Test Subtitle",
         category: "Test category",
+        imageSrc: "test"
       });
 
     postId = postResponse.body._id;
