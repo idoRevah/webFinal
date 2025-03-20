@@ -42,7 +42,7 @@ const router = express.Router();
  *                 type: string
  *               category:
  *                 type: string
- *               image:
+ *               imageSrc:
  *                 type: string
  *                 format: binary
  *     responses:
@@ -125,7 +125,7 @@ router.get("/:id", getPostById);
  *                 type: string
  *               category:
  *                 type: string
- *               image:
+ *               imageSrc:
  *                 type: string
  *                 format: binary
  *     responses:
