@@ -49,7 +49,10 @@ export const googleLogin = async (req: any, res: any) => {
 
 
 export const registerUser = async (req: any, res: any) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
+  const imageUrl = req.file
+      ? `${process.env.URL}:${process.env.PORT}/uploads/${req.file.filename}`
+      : "test";
 
   try {
     // Check if the user already exists
@@ -63,13 +66,40 @@ export const registerUser = async (req: any, res: any) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create the new user
-    const newUser = new User({ email, password: hashedPassword });
+    const newUser = new User({ email, username, password: hashedPassword, imageUrl: imageUrl });
     await newUser.save();
 
     res.status(201).json({ message: 'User registered successfully.' });
   } catch (error) {
     console.error('Error during registration:', error);
     res.status(500).json({ message: 'Internal server error.', error });
+  }
+};
+
+export const updateUser = async (req: any, res: any) => {
+  const { userId } = req.params;
+  const { username } = req.body;
+  const imageUrl = req.file ? `/uploads/${req.file.filename}` : undefined;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    if (user !== req.user) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    if (username) user.username = username;
+    if (imageUrl) user.imageUrl = imageUrl;
+
+    await user.save();
+
+    res.status(200).json({ message: "User updated successfully.", user });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ message: "Internal server error.", error });
   }
 };
 
