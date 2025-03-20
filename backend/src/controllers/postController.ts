@@ -3,7 +3,6 @@ import Post from "../models/postModel";
 import User from "../models/userModel";
 
 export const createPost = async (req: any, res: any) => {
-  console.log("im here 2");
   try {
     const { title, content, subtitle, category } = req.body;
     const imageSrc = req.file
