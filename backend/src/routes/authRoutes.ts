@@ -4,8 +4,11 @@ import {
     loginUser,
     logoutUser,
     refreshToken,
-    googleLogin
+    googleLogin,
+    updateUser
 } from "../controllers/authController";
+import { upload } from "../middlewares/fileUploadMiddleware";
+import { authenticate } from "../middlewares/authMiddleware";
 
 const router = express.Router();
 
@@ -61,16 +64,52 @@ router.post("/google", googleLogin);
  *               email:
  *                 type: string
  *                 description: User email
+ *               username:
+ *                 type: string
+ *                 description: Username
  *               password:
  *                 type: string
  *                 description: User password
+ *               imageUrl:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: User registered successfully
  *       400:
  *         description: User already exists
  */
-router.post('/register', registerUser);
+router.post('/register', upload.single("imageUrl"), registerUser);
+
+/**
+ * @swagger
+ * /auth/{userId}:
+ *   put:
+ *     summary: Edit a user
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: Username
+ *               imageUrl:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: User registered successfully
+ *       404:
+ *         description: User not found
+ *       403:
+ *         description: User unauthorized
+ */
+router.put('/:userId', authenticate, upload.single("imageUrl"), updateUser);
 
 /**
  * @swagger
