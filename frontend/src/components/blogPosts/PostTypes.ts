@@ -8,6 +8,7 @@ interface BlogPostDataType {
   content?: string;
   subtitle: string;
   _id?: string;
+  likes: string[];
 }
 
 export type { BlogPostDataType };

@@ -27,7 +27,6 @@ export const createPost = async (req: any, res: any) => {
 export const getPosts = async (req: any, res: any) => {
   try {
     const posts = await Post.find().populate("user", "username");
-    console.log(posts);
     const postsWithAuthor = posts.map((p) => ({
       ...p.toObject(),
       author: (p.user as any)?.username || "Unkown",
@@ -108,6 +107,23 @@ export const likePost = async (req: any, res: any) => {
     res.json(post);
   } catch (err) {
     console.error("Error liking post:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const unlikePost = async (req: any, res: any) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    if (post.likes.includes(req.user.id)) {
+      post.likes = post.likes.filter((userId) => userId.toString() !== req.user.id); // Remove user from array
+      await post.save();
+    }
+
+    res.json(post);
+  } catch (err) {
+    console.error("Error unliking post:", err);
     res.status(500).json({ message: "Internal server error" });
   }
 };

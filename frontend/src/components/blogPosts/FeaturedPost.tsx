@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-const FeaturedPost = ({ post }) => {
+
+const FeaturedPost = ({ post, onLike }) => {
   const navigate = useNavigate();
 
   if (!post) return null;
@@ -25,7 +26,7 @@ const FeaturedPost = ({ post }) => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }} // 🎭 Slight delay for cinematic reveal
+          transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
           className="absolute bottom-6 left-6"
         >
           <h1 className="text-4xl font-bold text-white">{post.title}</h1>
@@ -33,6 +34,15 @@ const FeaturedPost = ({ post }) => {
           <p className="text-sm text-gray-400 mt-1">
             {post.author} • {new Date(post.createdAt).toLocaleDateString()}
           </p>
+          <button
+            className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+            onClick={(e) => {
+              e.stopPropagation();
+              onLike(post._id);
+            }}
+          >
+            ❤️ {post.likes.length}
+          </button>
         </motion.div>
       </div>
     </motion.div>
