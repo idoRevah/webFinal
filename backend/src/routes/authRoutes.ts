@@ -125,7 +125,7 @@ router.put('/:userId', authenticate, upload.single("imageUrl"), updateUser);
  *           schema:
  *             type: object
  *             properties:
- *               email:
+ *               username:
  *                 type: string
  *               password:
  *                 type: string

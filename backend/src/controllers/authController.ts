@@ -37,7 +37,7 @@ export const googleLogin = async (req: any, res: any) => {
 
     const token = jwt.sign(
       { email: user.email, username, imageUrl, id: user._id },
-      process.env.JWT_SECRET || "",
+      JWT_SECRET || "",
       { expiresIn: "1d" }
     );
     res.json({ token, username, imageUrl, id: user.id });
@@ -51,8 +51,8 @@ export const googleLogin = async (req: any, res: any) => {
 export const registerUser = async (req: any, res: any) => {
   const { email, password, username } = req.body;
   const imageUrl = req.file
-      ? `${process.env.URL}:${process.env.PORT}/uploads/${req.file.filename}`
-      : "test";
+    ? `${process.env.URL}:${process.env.PORT}/uploads/${req.file.filename}`
+    : "test";
 
   try {
     // Check if the user already exists
@@ -69,7 +69,7 @@ export const registerUser = async (req: any, res: any) => {
     const newUser = new User({ email, username, password: hashedPassword, imageUrl: imageUrl });
     await newUser.save();
 
-    res.status(201).json({ message: 'User registered successfully.' });
+    res.status(201).json({ message: 'User registered successfully.', newUser });
   } catch (error) {
     console.error('Error during registration:', error);
     res.status(500).json({ message: 'Internal server error.', error });
@@ -77,7 +77,7 @@ export const registerUser = async (req: any, res: any) => {
 };
 
 export const updateUser = async (req: any, res: any) => {
-  const { userId } = req.params;
+  const userId = req.params.userId;
   const { username } = req.body;
   const imageUrl = req.file ? `/uploads/${req.file.filename}` : undefined;
 
@@ -87,7 +87,7 @@ export const updateUser = async (req: any, res: any) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    if (user !== req.user) {
+    if (!user._id.equals(req.user.id)) {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
@@ -104,11 +104,11 @@ export const updateUser = async (req: any, res: any) => {
 };
 
 export const loginUser = async (req: any, res: any) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
-    // Find the user by email
-    const user = await User.findOne({ email });
+    // Find the user by username
+    const user = await User.findOne({ username });
     if (!user || !user.password) {
       res.status(401).json({ message: 'Invalid credentials.' });
       return;
