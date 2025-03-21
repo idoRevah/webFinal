@@ -6,6 +6,7 @@ import {
   deletePost,
   likePost,
   getPostById,
+  unlikePost,
 } from "../controllers/postController";
 import { upload } from "../middlewares/fileUploadMiddleware";
 import { authenticate } from "../middlewares/authMiddleware";
@@ -197,6 +198,34 @@ router.delete("/:id", authenticate, deletePost);
  *         description: Internal server error
  */
 router.post("/:id/like", authenticate, likePost);
+
+/**
+ * @swagger
+ * /posts/{id}/unlike:
+ *   post:
+ *     summary: Unlike a post by ID
+ *     tags:
+ *       - Posts
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the post to unlike
+ *     responses:
+ *       200:
+ *         description: Post unliked successfully
+ *       403:
+ *         description: Unauthorized access
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/:id/unlike", authenticate, unlikePost);
 
 // Mount comment routes under `/posts/:postId/comments`
 router.use("/:postId/comments", commentRoutes);

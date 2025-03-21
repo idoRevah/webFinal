@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-const BlogGrid = ({ posts }) => {
+
+const BlogGrid = ({ posts, onLike }) => {
   const navigate = useNavigate();
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -9,15 +10,14 @@ const BlogGrid = ({ posts }) => {
           <motion.div
             key={post.id}
             initial={{ opacity: 0, y: 40 }}
-            onClick={() => navigate(`/post/${post._id}`)}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 30 }} // 💨 **Smooth fade out**
+            exit={{ opacity: 0, scale: 0.9, y: 30 }}
             transition={{
               duration: 0.6,
               delay: index * 0.1,
               ease: "easeInOut",
             }}
-            whileHover={{ scale: 1.05 }} // 🚀 **Subtle hover effect**
+            whileHover={{ scale: 1.05 }}
             className="relative overflow-hidden rounded-lg shadow-lg hover:scale-[1.05] transition transform duration-500"
           >
             <img
@@ -34,6 +34,15 @@ const BlogGrid = ({ posts }) => {
               <p className="text-xs text-gray-400 mt-1">
                 {post.author} • {new Date(post.createdAt).toLocaleDateString()}
               </p>
+              <button
+                className="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onLike(post._id);
+                }}
+              >
+                ❤️ {post.likes.length}
+              </button>
             </div>
           </motion.div>
         ))}
