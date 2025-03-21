@@ -33,7 +33,7 @@ const BlogGrid = ({ posts, onLike }) => {
               </h2>
               <p className="text-gray-300 mt-1 text-sm">{post.subtitle}</p>
               <p className="text-xs text-gray-400 mt-1">
-                {post.author} • {new Date(post.createdAt).toLocaleDateString()}
+                {post.author} • {new Date(post.createdAt).toLocaleDateString()} • 💬 {post.commentCount}
               </p>
               <button
                 className="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
