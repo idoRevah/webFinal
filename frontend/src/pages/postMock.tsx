@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import CommentsSection from "../components/fullPost/comments/CommentsSection";
 import { API_BASE_URL } from "@/config/config";
 import { useAuth } from "@/context/AuthContext";
-import FileUploader from "../components/addPost/PostImageInput"; // Import the FileUploader
+import FileUploader from "../components/addPost/PostImageInput";
 
 export default function FullPost() {
   const { id } = useParams();
@@ -11,6 +11,7 @@ export default function FullPost() {
   const [isEditing, setIsEditing] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const { token } = useAuth();
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     fetchPost();
@@ -49,7 +50,7 @@ export default function FullPost() {
       if (imageFile) {
         formData.append("imageSrc", imageFile);
       } else {
-        formData.append("imageSrc", post.imageSrc)
+        formData.append("imageSrc", post.imageSrc);
       }
 
       const response = await fetch(`${API_BASE_URL}/posts/${id}`, {
@@ -63,9 +64,28 @@ export default function FullPost() {
       if (!response.ok) throw new Error("Failed to update post");
 
       setIsEditing(false);
-      fetchPost(); // Refresh after update
+      fetchPost();
     } catch (error) {
       console.error("Error updating post:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/posts/${id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) throw new Error("Failed to delete post");
+
+        navigate("/"); // Redirect to the home page or another appropriate route
+      } catch (error) {
+        console.error("Error deleting post:", error);
+      }
     }
   };
 
@@ -110,9 +130,7 @@ export default function FullPost() {
             alt="Post banner"
             className="rounded-lg shadow-md w-full h-64 object-cover"
           />
-          {isEditing && (
-            <FileUploader onFileSelect={setImageFile} />
-          )}
+          {isEditing && <FileUploader onFileSelect={setImageFile} />}
         </div>
 
         {isEditing ? (
@@ -130,20 +148,28 @@ export default function FullPost() {
           />
         )}
 
-        {/* Edit & Save Buttons */}
         <div className="flex justify-end mt-4">
           {isEditing ? (
-            <button onClick={handleSave} className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded">
-              Save
-            </button>
+            <>
+              <button onClick={handleSave} className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded mr-2">
+                Save
+              </button>
+              <button onClick={() => setIsEditing(false)} className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded">
+                Cancel
+              </button>
+            </>
           ) : (
-            <button onClick={() => setIsEditing(true)} className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded">
-              Edit
-            </button>
+            <>
+              <button onClick={() => setIsEditing(true)} className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded mr-2">
+                Edit
+              </button>
+              <button onClick={handleDelete} className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded">
+                Delete
+              </button>
+            </>
           )}
         </div>
 
-        {/* Comments Section */}
         {id && <CommentsSection comments={post.comments} postId={id} />}
       </div>
     </div>
