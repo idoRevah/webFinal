@@ -4,6 +4,7 @@ import CommentsSection from "../components/fullPost/comments/CommentsSection";
 import { API_BASE_URL } from "@/config/config";
 import { useAuth } from "@/context/AuthContext";
 import FileUploader from "../components/addPost/PostImageInput";
+import { Snackbar, Alert } from "@mui/material";
 
 export default function FullPost() {
     const { id } = useParams();
@@ -11,6 +12,7 @@ export default function FullPost() {
     const [isEditing, setIsEditing] = useState(false);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
     const { token } = useAuth();
     const navigate = useNavigate();
 
@@ -28,6 +30,7 @@ export default function FullPost() {
         } catch (error) {
             console.error("Failed to fetch post:", error);
             setError("Failed to load the post.");
+            setOpenSnackbar(true);
         }
     };
 
@@ -74,6 +77,7 @@ export default function FullPost() {
         } catch (error: any) {
             console.error("Error updating post:", error);
             setError(error.message);
+            setOpenSnackbar(true);
         }
     };
 
@@ -96,12 +100,20 @@ export default function FullPost() {
             } catch (error: any) {
                 console.error("Error deleting post:", error);
                 setError(error.message);
+                setOpenSnackbar(true);
             }
         }
     };
 
     const removeHTMLTags = (html: string) => {
         return html.replace(/<[^>]*>/g, '');
+    };
+
+    const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenSnackbar(false);
     };
 
     if (!post) {
@@ -111,7 +123,6 @@ export default function FullPost() {
     return (
         <div className="min-h-screen flex justify-center bg-gray-950 text-white py-12 px-4">
             <div className="bg-gray-900 shadow-lg rounded-lg w-full max-w-5xl p-8">
-                {error && <div className="text-red-500 text-center mb-4">{error}</div>}
                 {isEditing ? (
                     <input
                         type="text"
@@ -188,6 +199,11 @@ export default function FullPost() {
 
                 {id && <CommentsSection comments={post.comments} postId={id} />}
             </div>
+            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                    {error}
+                </Alert>
+            </Snackbar>
         </div>
     );
 }
