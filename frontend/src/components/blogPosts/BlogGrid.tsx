@@ -18,17 +18,26 @@ const BlogGrid = ({ posts, onLike }) => {
             className="relative overflow-hidden rounded-lg shadow-lg hover:scale-[1.05] transition transform duration-500"
           >
             <img src={post.imageSrc} className="w-full h-64 object-cover opacity-80" alt={post.title} />
-            <button
-              className={`mt-2 px-4 py-2 rounded-lg transition ${
-                hasLiked ? "bg-red-600 text-white hover:bg-red-700" : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-              }`}
-              onClick={(e) => {
-                e.stopPropagation();
-                onLike(post._id);
-              }}
-            >
-              {hasLiked ? "💔 Unlike" : "❤️ Like"} {post.likes.length}
-            </button>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-transparent"></div>
+            <div className="absolute bottom-6 left-6">
+              <h2 className="text-2xl font-semibold text-white">
+                {post.title}
+              </h2>
+              <p className="text-gray-300 mt-1 text-sm">{post.subtitle}</p>
+              <p className="text-xs text-gray-400 mt-1">
+                {post.author} • {new Date(post.createdAt).toLocaleDateString()} • 💬 {post.commentCount}
+              </p>
+              <button
+                className={`mt-2 px-4 py-2 rounded-lg transition ${hasLiked ? "bg-red-600 text-white hover:bg-red-700" : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  }`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onLike(post._id);
+                }}
+              >
+                {hasLiked ? "💔 Unlike" : "❤️ Like"} {post.likes.length}
+              </button>
+            </div>
           </motion.div>
         );
       })}
