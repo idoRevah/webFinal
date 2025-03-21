@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CommentsSection from "../components/fullPost/comments/CommentsSection";
 import { API_BASE_URL } from "@/config/config";
 import { useAuth } from "@/context/AuthContext";
+import FileUploader from "../components/addPost/PostImageInput"; // Import the FileUploader
 
 export default function FullPost() {
   const { id } = useParams();
@@ -31,62 +32,32 @@ export default function FullPost() {
     return await commentsResponse.json();
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setPost((prev: any) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
-    }
-  };
-
-  const uploadImage = async (): Promise<string | null> => {
-    if (!imageFile) return null; // No new image selected
-
-    const formData = new FormData();
-    formData.append("image", imageFile);
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/upload`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error("Image upload failed");
-
-      const data = await response.json();
-      return data.imageUrl; // Assuming the server returns `{ imageUrl: "https://yourserver.com/uploads/filename.jpg" }`
-    } catch (error) {
-      console.error("Image upload error:", error);
-      return null;
-    }
-  };
-
   const handleSave = async () => {
     try {
-      let updatedImageSrc = post.imageSrc;
+      const formData = new FormData();
+      formData.append("title", post.title);
+      formData.append("subtitle", post.subtitle);
+      formData.append("content", post.content);
 
       if (imageFile) {
-        const uploadedImageUrl = await uploadImage();
-        if (uploadedImageUrl) {
-          updatedImageSrc = uploadedImageUrl;
-        }
+        formData.append("imageSrc", imageFile);
+      } else {
+        formData.append("imageSrc", post.imageSrc)
       }
 
       const response = await fetch(`${API_BASE_URL}/posts/${id}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          title: post.title,
-          subtitle: post.subtitle,
-          content: post.content,
-          imageSrc: updatedImageSrc,
-        }),
+        body: formData,
       });
 
       if (!response.ok) throw new Error("Failed to update post");
@@ -140,7 +111,7 @@ export default function FullPost() {
             className="rounded-lg shadow-md w-full h-64 object-cover"
           />
           {isEditing && (
-            <input type="file" accept="image/*" onChange={handleImageChange} className="mt-2 text-gray-400" />
+            <FileUploader onFileSelect={setImageFile} />
           )}
         </div>
 
