@@ -3,8 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 const FeaturedPost = ({ post, onLike }) => {
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const userId = user?.id;
 
   if (!post) return null;
+
+  const hasLiked = post.likes.includes(userId);
 
   return (
     <motion.div
@@ -32,16 +36,18 @@ const FeaturedPost = ({ post, onLike }) => {
           <h1 className="text-4xl font-bold text-white">{post.title}</h1>
           <p className="text-gray-300 mt-2">{post.subtitle}</p>
           <p className="text-sm text-gray-400 mt-1">
-            {post.author} • {new Date(post.createdAt).toLocaleDateString()} • 💬 {post.commentCount}
+            {post.author} • {new Date(post.createdAt).toLocaleDateString()}
           </p>
           <button
-            className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+            className={`mt-4 px-4 py-2 rounded-lg transition ${
+              hasLiked ? "bg-red-600 text-white hover:bg-red-700" : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+            }`}
             onClick={(e) => {
               e.stopPropagation();
               onLike(post._id);
             }}
           >
-            ❤️ {post.likes.length}
+            {hasLiked ? "💔 Unlike" : "❤️ Like"} {post.likes.length}
           </button>
         </motion.div>
       </div>

@@ -10,6 +10,8 @@ export default function BlogPage() {
   const [posts, setPosts] = useState<Array<BlogPostDataType>>([]);
   const [filteredPosts, setFilteredPosts] = useState<Array<BlogPostDataType>>([]);
   const { token } = useAuth();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const userId = user?.id;
 
   useEffect(() => {
     fetchPosts();
@@ -18,24 +20,22 @@ export default function BlogPage() {
   const fetchPosts = async () => {
     const postsDataResponse = await fetch(`${API_BASE_URL}/posts`);
     const data = await postsDataResponse.json();
-
-    // Fetch comments for each post
-    const postsWithComments = await Promise.all(
-        data.map(async (p) => {
-            const commentsResponse = await fetch(`${API_BASE_URL}/posts/${p._id}/comments`);
-            const comments = await commentsResponse.json();
-            return { ...p, id: p._id, commentCount: comments.length };
-        })
-    );
-
-    setPosts(postsWithComments);
-    setFilteredPosts(postsWithComments);
-};
-
+    const formattedPosts = data.map((p) => ({ ...p, id: p._id }));
+    setPosts(formattedPosts);
+    setFilteredPosts(formattedPosts);
+  };
 
   const handleLike = async (postId: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/posts/${postId}/like`, {
+      const post = posts.find((p) => p.id === postId);
+      if (!post) return;
+
+      const hasLiked = post.likes.includes(userId);
+      const endpoint = hasLiked
+        ? `${API_BASE_URL}/posts/${postId}/unlike`
+        : `${API_BASE_URL}/posts/${postId}/like`;
+
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export default function BlogPage() {
       });
 
       if (!response.ok) {
-        console.error("Failed to like post");
+        console.error("Failed to update like status");
         return;
       }
 
@@ -62,7 +62,7 @@ export default function BlogPage() {
         )
       );
     } catch (error) {
-      console.error("Error liking post:", error);
+      console.error("Error updating like status:", error);
     }
   };
 
