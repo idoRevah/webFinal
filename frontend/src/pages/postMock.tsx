@@ -4,7 +4,7 @@ import CommentsSection from "../components/fullPost/comments/CommentsSection";
 import { API_BASE_URL } from "@/config/config";
 import { useAuth } from "@/context/AuthContext";
 import FileUploader from "../components/addPost/PostImageInput";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material";
 
 export default function FullPost() {
     const { id } = useParams();
@@ -13,6 +13,7 @@ export default function FullPost() {
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false); // State for Dialog visibility
     const { token } = useAuth();
     const navigate = useNavigate();
 
@@ -82,31 +83,26 @@ export default function FullPost() {
     };
 
     const handleDelete = async () => {
-        if (window.confirm("Are you sure you want to delete this post?")) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/posts/${id}`, {
-                    method: "DELETE",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+        try {
+            const response = await fetch(`${API_BASE_URL}/posts/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
-                if (!response.ok) {
-                    if (response.status === 403) throw new Error("Unauthorized: You don’t have permission to delete this post.");
-                    throw new Error("Failed to delete post. Please try again.");
-                }
-
-                navigate("/");
-            } catch (error: any) {
-                console.error("Error deleting post:", error);
-                setError(error.message);
-                setOpenSnackbar(true);
+            if (!response.ok) {
+                if (response.status === 403) throw new Error("Unauthorized: You don’t have permission to delete this post.");
+                throw new Error("Failed to delete post. Please try again.");
             }
-        }
-    };
 
-    const removeHTMLTags = (html: string) => {
-        return html.replace(/<[^>]*>/g, '');
+            navigate("/");
+        } catch (error: any) {
+            console.error("Error deleting post:", error);
+            setError(error.message);
+            setOpenSnackbar(true);
+        }
+        setOpenDialog(false); // Close the dialog after deletion
     };
 
     const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -114,6 +110,14 @@ export default function FullPost() {
             return;
         }
         setOpenSnackbar(false);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true); // Open the dialog
     };
 
     if (!post) {
@@ -190,7 +194,7 @@ export default function FullPost() {
                             <button onClick={() => setIsEditing(true)} className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded mr-2">
                                 Edit
                             </button>
-                            <button onClick={handleDelete} className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded">
+                            <button onClick={handleOpenDialog} className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded">
                                 Delete
                             </button>
                         </>
@@ -204,6 +208,22 @@ export default function FullPost() {
                     {error}
                 </Alert>
             </Snackbar>
+
+            {/* Confirmation Dialog for Deletion */}
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>Delete Post</DialogTitle>
+                <DialogContent>
+                    Are you sure you want to delete this post? This action cannot be undone.
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleDelete} color="secondary">
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }
