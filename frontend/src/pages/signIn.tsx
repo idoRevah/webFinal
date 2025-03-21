@@ -80,11 +80,11 @@ export default function AuthPage(): JSX.Element {
                   </div>
 
                   <TextField
-                    name="username"
-                    label="Username"
+                    name="email"
+                    label="Email"
                     fullWidth
                     variant="outlined"
-                    value={form.username}
+                    value={form.email}
                     onChange={handleChange}
                   />
                 </>

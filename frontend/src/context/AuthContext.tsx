@@ -79,7 +79,7 @@ export function AuthProvider({ children }) {
   
       const data = await response.json();
       saveUserToLocalStorage(data);
-      navigate("/blog");
+      navigate("/SignIn");
     } catch (error) {
       console.error("Signup error:", error);
     }
