@@ -61,10 +61,10 @@ export const updatePost = async (req: any, res: any) => {
       res.status(403).json({ message: "Unauthorized" });
       return;
     }
-    const { title, content, subtitile, category } = req.body;
+    const { title, content, subtitle, category } = req.body;
     post.title = title || post.title;
     post.content = content || post.content;
-    post.subtitle = subtitile || post.subtitle;
+    post.subtitle = subtitle || post.subtitle;
     post.imageSrc = req.file
       ? `${process.env.URL}:${process.env.PORT}/uploads/${req.file.filename}`
       : post.imageSrc;

@@ -36,6 +36,13 @@ const routes: Array<Route> = [
     isSignInDepand: false,
   },
   {
+    text: "Blog",
+    path: "/",
+    element: blogModern,
+    isVisible: false,
+    isSignInDepand: false,
+  },
+  {
     text: "Add Post",
     path: "/AddPost",
     element: AddPost,
