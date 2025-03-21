@@ -18,10 +18,20 @@ export default function BlogPage() {
   const fetchPosts = async () => {
     const postsDataResponse = await fetch(`${API_BASE_URL}/posts`);
     const data = await postsDataResponse.json();
-    const formattedPosts = data.map((p) => ({ ...p, id: p._id }));
-    setPosts(formattedPosts);
-    setFilteredPosts(formattedPosts);
-  };
+
+    // Fetch comments for each post
+    const postsWithComments = await Promise.all(
+        data.map(async (p) => {
+            const commentsResponse = await fetch(`${API_BASE_URL}/posts/${p._id}/comments`);
+            const comments = await commentsResponse.json();
+            return { ...p, id: p._id, commentCount: comments.length };
+        })
+    );
+
+    setPosts(postsWithComments);
+    setFilteredPosts(postsWithComments);
+};
+
 
   const handleLike = async (postId: string) => {
     try {
