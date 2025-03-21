@@ -1,13 +1,11 @@
 import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
-import { FaRegThumbsUp, FaThumbsUp } from "react-icons/fa"; // Like icons
 import { API_BASE_URL } from "@/config/config";
 
 interface Comment {
   author: string;
   createdAt: string;
   content: string;
-  likes: number;
 }
 
 interface CommentsSectionProps {
@@ -22,14 +20,6 @@ export default function CommentsSection({
   const [commentList, setCommentList] = useState(comments);
   const [newComment, setNewComment] = useState("");
   const { token } = useAuth();
-
-  // Handle like action
-  // TODO: backend
-  const handleLike = (index: number) => {
-    const updatedComments = [...commentList];
-    updatedComments[index].likes += 1;
-    setCommentList(updatedComments);
-  };
 
   // Handle adding a new comment
   const handleAddComment = async () => {
@@ -92,14 +82,6 @@ export default function CommentsSection({
                   <p className="text-gray-400 text-sm">
                     {new Date(comment.createdAt).toLocaleDateString()}
                   </p>
-                </div>
-                {/* Like Button */}
-                <div
-                  className="flex items-center gap-2 cursor-pointer text-gray-400 hover:text-blue-400 transition-all"
-                  onClick={() => handleLike(index)}
-                >
-                  {comment.likes > 0 ? <FaThumbsUp /> : <FaRegThumbsUp />}
-                  <span>{comment.likes}</span>
                 </div>
               </div>
               <p className="text-gray-300 mt-2">{comment.content}</p>

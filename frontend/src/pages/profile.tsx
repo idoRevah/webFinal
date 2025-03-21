@@ -52,7 +52,7 @@ export default function Profile(): JSX.Element {
                 throw new Error("Failed to update profile");
             }
             //Update local storage
-            const updatedUser = {...user};
+            const updatedUser = { ...user };
             updatedUser.username = editedUsername;
             if (preview) updatedUser.imageUrl = preview;
             localStorage.setItem("user", JSON.stringify(updatedUser));
@@ -128,7 +128,7 @@ export default function Profile(): JSX.Element {
                         </Button>
                         <Button
                             variant="contained"
-                            className="bg-red-500 text-white w-full mt-2 py-3 text-lg rounded-xl hover:bg-red-600 transition-all"
+                            className="bg-red-500 text-white w-full mt-8 py-3 text-lg rounded-xl hover:bg-red-600 transition-all" // Increased margin-top to mt-8
                             onClick={logout}
                         >
                             Sign Out
