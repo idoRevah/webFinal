@@ -10,6 +10,7 @@ export default function FullPost() {
     const [post, setPost] = useState<any>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [imageFile, setImageFile] = useState<File | null>(null);
+    const [error, setError] = useState<string | null>(null);
     const { token } = useAuth();
     const navigate = useNavigate();
 
@@ -23,8 +24,10 @@ export default function FullPost() {
             const postData = await postResponse.json();
             postData.comments = await fetchComments();
             setPost(postData);
+            setError(null);
         } catch (error) {
             console.error("Failed to fetch post:", error);
+            setError("Failed to load the post.");
         }
     };
 
@@ -61,12 +64,16 @@ export default function FullPost() {
                 body: formData,
             });
 
-            if (!response.ok) throw new Error("Failed to update post");
+            if (!response.ok) {
+                if (response.status === 403) throw new Error("Unauthorized: You don’t have permission to edit this post.");
+                throw new Error("Failed to update post. Please try again.");
+            }
 
             setIsEditing(false);
             fetchPost();
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error updating post:", error);
+            setError(error.message);
         }
     };
 
@@ -80,18 +87,22 @@ export default function FullPost() {
                     },
                 });
 
-                if (!response.ok) throw new Error("Failed to delete post");
+                if (!response.ok) {
+                    if (response.status === 403) throw new Error("Unauthorized: You don’t have permission to delete this post.");
+                    throw new Error("Failed to delete post. Please try again.");
+                }
 
                 navigate("/");
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Error deleting post:", error);
+                setError(error.message);
             }
         }
     };
 
     const removeHTMLTags = (html: string) => {
         return html.replace(/<[^>]*>/g, '');
-    }
+    };
 
     if (!post) {
         return <div className="text-center text-gray-500 mt-10">Loading...</div>;
@@ -100,6 +111,7 @@ export default function FullPost() {
     return (
         <div className="min-h-screen flex justify-center bg-gray-950 text-white py-12 px-4">
             <div className="bg-gray-900 shadow-lg rounded-lg w-full max-w-5xl p-8">
+                {error && <div className="text-red-500 text-center mb-4">{error}</div>}
                 {isEditing ? (
                     <input
                         type="text"
