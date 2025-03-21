@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import FileUploader from "@/components/addPost/PostImageInput"; // ✅ Import FileUploader
 
 export default function AuthPage(): JSX.Element {
-  const { user, login, logout, loginWithEmail, signupWithEmail } = useAuth();
+  const { user, login, logout, loginWithUsername, signupWithEmail } = useAuth();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [profileImage, setProfileImage] = useState<File | null>(null);
@@ -18,14 +18,14 @@ export default function AuthPage(): JSX.Element {
 
   const handleFileSelect = (file: File | null) => {
     setProfileImage(file);
-    setPreview(file ? URL.createObjectURL(file) : null); // ✅ Show preview
+    setPreview(file ? URL.createObjectURL(file) : null);
   };
 
   const handleSubmit = () => {
     if (mode === "login") {
-      loginWithEmail(form.email, form.password);
+      loginWithUsername(form.username, form.password);
     } else {
-      signupWithEmail(form.username, form.email, form.password, profileImage);
+      signupWithEmail(form.username, form.email, form.password, profileImage); // Pass profileImage
     }
   };
 
@@ -90,11 +90,11 @@ export default function AuthPage(): JSX.Element {
                 </>
               )}
               <TextField
-                name="email"
-                label="Email"
+                name="username"
+                label="Username"
                 fullWidth
                 variant="outlined"
-                value={form.email}
+                value={form.username}
                 onChange={handleChange}
               />
               <TextField

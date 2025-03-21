@@ -40,12 +40,12 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const loginWithEmail = async (email, password) => {
+  const loginWithUsername = async (username, password) => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, password }),
       });
 
       if (!response.ok) throw new Error("Invalid credentials");
@@ -55,22 +55,29 @@ export function AuthProvider({ children }) {
       saveUserToLocalStorage(data);
       navigate("/blog");
     } catch (error) {
-      console.error("Email login error:", error);
+      console.error("Username login error:", error);
     }
   };
 
-  const signupWithEmail = async (username, email, password) => {
+  const signupWithEmail = async (username, email, password, profileImage) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("email", email);
+      formData.append("password", password);
+  
+      if (profileImage) {
+        formData.append("imageUrl", profileImage); // Append the image file
+      }
+  
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
+        body: formData, // Send FormData, no need for JSON headers
       });
-
+  
       if (!response.ok) throw new Error("Signup failed");
-
+  
       const data = await response.json();
-
       saveUserToLocalStorage(data);
       navigate("/blog");
     } catch (error) {
@@ -78,6 +85,7 @@ export function AuthProvider({ children }) {
     }
   };
 
+  
   const saveUserToLocalStorage = (data) => {
     const savedUser = {
       username: data.username,
@@ -105,7 +113,8 @@ export function AuthProvider({ children }) {
         token,
         login,
         logout,
-        loginWithEmail,
+        loginWithUsername
+    ,
         signupWithEmail,
       }}
     >
