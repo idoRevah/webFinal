@@ -4,10 +4,12 @@ import SearchBar from "../components/blogPosts/SerachBar";
 import BlogGrid from "../components/blogPosts/BlogGrid";
 import FeaturedPost from "../components/blogPosts/FeaturedPost";
 import { API_BASE_URL } from "@/config/config";
+import { useAuth } from "@/context/AuthContext";
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<Array<BlogPostDataType>>([]);
   const [filteredPosts, setFilteredPosts] = useState<Array<BlogPostDataType>>([]);
+  const { token } = useAuth();
 
   useEffect(() => {
     fetchPosts();
@@ -25,8 +27,10 @@ export default function BlogPage() {
     try {
       const response = await fetch(`${API_BASE_URL}/posts/${postId}/like`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (!response.ok) {
