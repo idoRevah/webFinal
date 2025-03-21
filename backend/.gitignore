@@ -12,6 +12,9 @@ client-cert.pem
 client-key.pem
 client.csr
 
+# Uploads
+uploads
+
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
