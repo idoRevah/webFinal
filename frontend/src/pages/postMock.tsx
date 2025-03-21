@@ -167,7 +167,7 @@ export default function FullPost() {
                 {isEditing ? (
                     <textarea
                         name="content"
-                        value={removeHTMLTags(post.content)}
+                        value={post.content}
                         onChange={handleInputChange}
                         className="w-full text-lg bg-gray-800 text-gray-300 p-4 rounded leading-relaxed"
                         rows={8}

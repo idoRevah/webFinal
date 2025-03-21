@@ -90,29 +90,32 @@ export default function Blog() {
   const handlePublish = async () => {
     if (!imageSrc) return displayMessage("Please upload an image.", true);
     if (!user?.id) return displayMessage("Please sign in first.", true);
-
+  
     setIsLoading(true);
     setIsSuccess(false); // Reset success animation
-
+  
+    // Strip HTML tags from content before sending it
+    const plainTextContent = removeHTMLTags(content);
+  
     const formData = new FormData();
     formData.append("title", title);
     formData.append("subtitle", subtitle);
-    formData.append("content", content);
+    formData.append("content", plainTextContent); // Send plain text here
     formData.append("category", category);
     formData.append("userId", user.id);
     formData.append("imageSrc", imageSrc);
-
+  
     try {
       const response = await fetch(`${API_BASE_URL}/posts`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
-
+  
       if (!response.ok) throw new Error("Failed to publish post");
-
+  
       const data = await response.json();
-
+  
       setIsLoading(false);
       setIsSuccess(true);
       displayMessage("Post Created Successfully!", false);
@@ -126,7 +129,12 @@ export default function Blog() {
       displayMessage("Failed to publish post.", true);
     }
   };
-
+  
+  // Function to strip HTML tags
+  const removeHTMLTags = (html: string) => {
+    return html.replace(/<\/?[^>]+(>|$)/g, ""); // This regex removes all HTML tags
+  };
+  
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white px-6">
       {/*Lottie Loading Animation */}
