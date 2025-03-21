@@ -105,7 +105,7 @@ export default function FullPost() {
         setOpenDialog(false); // Close the dialog after deletion
     };
 
-    const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    const handleCloseSnackbar = (_event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
             return;
         }

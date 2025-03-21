@@ -13,7 +13,12 @@ export const createComment = async (req: any, res: any) => {
       post: req.params.postId,
     });
     await comment.save();
-    res.status(201).json(comment);
+    const newComment = {
+      content: comment.content,
+      createdAt: comment.createdAt,
+      author: "You (just now)"
+    };
+    res.status(201).json(newComment);
   } catch (err) {
     console.error("Error creating comment:", err);
     res.status(500).json({ message: "Internal server error" });
