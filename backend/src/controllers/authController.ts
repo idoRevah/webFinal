@@ -117,7 +117,7 @@ export const loginUser = async (req: any, res: any) => {
     // Compare the provided password with the stored hash
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      res.status(401).json({ message: 'Invalid credentials.' });
+      res.status(401).json({ message: 'Invalid password.' });
       return;
     }
 
@@ -132,7 +132,7 @@ export const loginUser = async (req: any, res: any) => {
     // Store the refresh token
     refreshTokens.add(refreshToken);
 
-    res.status(200).json({ accessToken, refreshToken });
+    res.json({ token: accessToken, username, imageUrl: user.imageUrl, id: user.id });
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ message: 'Internal server error.', error });
