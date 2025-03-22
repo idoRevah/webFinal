@@ -9,7 +9,6 @@ export const authenticate = async (req: any, res: any, next: any) => {
   if (!token) return res.status(401).json({ message: "No token provided" });
 
   try {
-    if (token === process.env.ADMIN_TOKEN) next();
     const decoded: any = jwt.verify(token, JWT_SECRET);
     req.user = await User.findById(decoded.id);
 
