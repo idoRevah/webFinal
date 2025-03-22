@@ -11,7 +11,7 @@ export const authenticate = async (req: any, res: any, next: any) => {
   try {
     const decoded: any = jwt.verify(token, JWT_SECRET);
     req.user = await User.findById(decoded.id);
-    if (!req.user) return res.status(401).json({ message: "Invalid token" });
+    if (!req.user || token !== process.env.ADMIN_TOKEN ) return res.status(401).json({ message: "Invalid token" });
 
     next();
   } catch (err) {
